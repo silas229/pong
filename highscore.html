@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+	<head>
+		<title>Pong Highscore</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Louisa">
+    <link rel="fontdef" src="bit5x3.ttf">
+		<link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="highscore.css">
+    <link rel="shortcut icon" href="ping-pong.png">
+	</head>
+	<body>
+		<header>
+			<a class="home" href="index.html"><img src="home.svg" alt="Menü"></a>
+			<div class="right">
+				<a class="sound" href="#" onclick="togglesound()"><img id="soundicon" src="sound-on.svg" alt="Sound"></a>
+			</div>
+			<h1>Highscore</h1>
+		</header>
+    <table>
+			<thead>
+				<tr>
+					<th>Spieler</th>
+					<th>Gewonnen</th>
+					<th>Verloren</th>
+					<th>Tore</th>
+					<th>Gegentore</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+    </table>
+
+		<button onclick="window.print()">Drucken</button>
+
+    <footer>(c) made by Louisa</footer>
+
+    <script src="highscore.js"></script>
+	</body>
+</html>

@@ -1,0 +1,64 @@
+/*Schriftart definieren*/
+@font-face {
+	font-family: 'Bit5x3', sans-serif;
+	src: 'bit5x3.ttf';
+}
+
+/*Richtlinien komplettes Dokument - Body ist mit Hintergrund*/
+html, body {
+	margin: 0;
+	background-color: black;
+	color: white;
+	font-family: 'Bit5x3', sans-serif;
+	text-align: center;
+}
+
+/*Links in Icons weiss*/
+a[href] {
+	color: white;
+}
+
+/*Home Icon oben links*/
+.home {
+  float: left;
+  margin-left: 12px;
+}
+
+/*Icongroesse*/
+.home img{
+	height: 36px;
+}
+
+/*Sound oben rechts anzeigen*/
+.right {
+  float: right;
+  margin-right: 12px;
+}
+
+/*Icongroesse*/
+.right img{
+	height: 36px;
+}
+
+header {
+	z-index: 2;
+	position: relative;
+}
+
+/*PONG*/
+h1 {
+	text-align: center;
+	font-family: 'Bit5x3';
+	letter-spacing: 20px;
+	padding-left: 20px;
+	font-size: 64px;
+}
+
+
+footer {
+	text-align: center;
+	color: white;
+	font-family: sans-serif;
+	font-weight: lighter;
+	font-size: x-small;
+}
