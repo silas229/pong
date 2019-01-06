@@ -14,7 +14,7 @@
 			<a class="home" href="index.html"><img src="home.svg" alt="Menü"></a>
 			<div class="right">
 				<a href="#" onclick="togglePause()" id="pause"><img src="pause.svg" alt="Pause"></a>
-				<a href="#" onclick="togglesound()"><img id="soundicon" src="sound-on.svg" alt="Sound"></a>
+				<a href="#" onclick="toggleSound()"><img id="soundicon" src="sound-on.svg" alt="Sound"></a>
 			</div>
 			<h1>Pong</h1>
 		</header>
@@ -22,8 +22,10 @@
 		<div class="modal">
 			<div class="playerinfo">
 				<h2>Bitte gib deinen Namen ein!</h2>
-				<input type="text" name="spielername" id="spielername" maxlength="30" placeholder="Spielername" autocomplete="given-name" />
-				<a href="#" id="senden">Auswahl</a>
+				<form id="nameInput">
+					<input type="text" name="spielername" id="spielername" maxlength="30" placeholder="Spielername" autocomplete="given-name" />
+					<button type="button" name="senden">Auswahl</button>
+				</form>
 			</div>
 		</div>
 
