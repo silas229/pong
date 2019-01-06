@@ -35,7 +35,7 @@ function loadSounds() {
 	return this;
 }
 sound = loadSounds();
-sound.startSnd.play();
+sound.start.play();
 
 var stopandgo = false;
 pause = document.querySelector("#pause img");
