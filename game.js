@@ -25,6 +25,18 @@ function togglesound() {
 	}
 }
 
+function loadSounds() {
+	this.start = new Audio("sounds/start.ogg");
+	this.point = new Audio("sounds/point.ogg");
+	this.side = new Audio("sounds/side.ogg");
+	this.paddle = new Audio("sounds/paddle.ogg");
+	this.win = new Audio("sounds/win.ogg");
+	this.lose = new Audio("sounds/lose.ogg");
+	return this;
+}
+sound = loadSounds();
+sound.startSnd.play();
+
 var stopandgo = false;
 pause = document.querySelector("#pause img");
 function togglePause(){
@@ -76,7 +88,7 @@ var Pong = {
 
 		Pong.draw();
 	},
-	clear : function(){
+	clear: function(){
     Pong.context.clearRect(0, 0, Pong.canvas.width, Pong.canvas.height);
   },
 	draw: function() {
@@ -135,6 +147,7 @@ document.getElementById('senden').addEventListener('click', function () {
 	document.getElementById('name').innerHTML = window.name;
 	document.getElementsByClassName('modal')[0].style.display = 'none';
 	document.getElementById('pause').style.display = 'inline-block';
+	startSnd.pause();
 }, false);
 
 function endGame() {
