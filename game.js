@@ -299,7 +299,8 @@ var rounds = {
 
 /*-------------------------------------------------*/
 
-document.getElementById('senden').addEventListener('click', function () {
+document.getElementById('nameInput').addEventListener('submit', function (event) {
+	event.preventDefault();
 	window.name = document.getElementById("spielername").value;
 	if (window.name == '') {
 		window.name = 'Spieler';
