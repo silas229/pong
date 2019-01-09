@@ -14,7 +14,7 @@
 			<a class="home" href="index.html"><img src="home.svg" alt="Menü"></a>
 			<div class="right">
 				<a href="#" onclick="togglePause()" id="pause"><img src="pause.svg" alt="Pause"></a>
-				<a href="#" onclick="toggleSound()"><img id="soundicon" src="sound-on.svg" alt="Sound"></a>
+				<a href="#"><img id="soundicon" src="sound-on.svg" alt="Sound"></a>
 			</div>
 			<h1>Pong</h1>
 		</header>
@@ -23,7 +23,7 @@
 			<div class="playerinfo">
 				<h2>Bitte gib deinen Namen ein!</h2>
 				<form id="nameInput">
-					<input type="text" name="spielername" id="spielername" maxlength="30" placeholder="Spielername" autocomplete="given-name" />
+					<input type="text" name="spielername" id="spielername" maxlength="30" placeholder="Spielername" autocomplete="given-name" autofocus />
 					<button type="submit" name="senden">Auswahl</button>
 				</form>
 			</div>
@@ -39,7 +39,7 @@
 		</table>
 
 		<canvas id="canvas" width="640" height="480"></canvas>
-		<p id="msg"></p>
+		<p id="msg">&nbsp;</p>
 		<footer>&copy; made by Louisa</footer>
 		<script src="game.js"></script>
 		<!-- <audio autoplay controls><source src="sounds/reset.ogg" type="audio/ogg"></audio> -->

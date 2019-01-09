@@ -4,6 +4,13 @@ if (!sessionStorage.getItem('sound') === null) {
 var sound = sessionStorage.getItem('sound');
 soundicon = document.getElementById("soundicon");
 
+document.getElementById("pause").addEventListener("click", function (event) {
+	event.preventDefault;
+	this.classList.remove("restart");
+	msg("&nbsp;");
+	toggleSound();
+})
+
 /**
  * Toggle sound
  * @author silas229
@@ -45,7 +52,7 @@ function togglePause(){
 	if(stopandgo){
 		stopandgo = false;
 		pause.src = "pause.svg";
-		raf = window.requestAnimationFrame(draw);
+		raf = window.requestAnimationFrame(game.draw);
 	} else {
 			stopandgo = true;
 			pause.src = "play.svg";
@@ -71,7 +78,7 @@ var bottomPressed = false;
 
 var game = {
 	start: function() {
-		raf = window.requestAnimationFrame(draw);
+		raf = window.requestAnimationFrame(game.draw);
 	},
 	stop: function() {
 		window.cancelAnimationFrame(raf);
@@ -219,10 +226,6 @@ var game = {
 
 		this.display();
 
-		rounds.state++;
-		player.score = 0;
-		computer.score = 0;
-
 		if (rounds.state == 2) {
 			if (player.score == 10) {
 				msg("Ende des Spiels. " + player.name + " hat gewonnen!");
@@ -232,7 +235,12 @@ var game = {
 			this.endGame();
 		}
 
-		document.getElementById("#sound")
+		rounds.state++;
+		player.score = 0;
+		computer.score = 0;
+
+		togglePause();
+		document.getElementById("pause").classList.add("restart");
 	},
 	/**
 	* Ends a game
@@ -262,6 +270,12 @@ var game = {
 		}
 	}
 }
+
+window.addEventListener("gamepadconnected", function(e) {
+  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+    e.gamepad.index, e.gamepad.id,
+    e.gamepad.buttons.length, e.gamepad.axes.length);
+});
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -335,7 +349,7 @@ var rounds = {
 	state: 0,
 	round: [1,2,3],
 	draw: function (nr) {
-		ctx.fillText("Round "+this.round[nr].toString(), canvas.width/2, 48);
+		ctx.fillText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
 	}
 }
 
