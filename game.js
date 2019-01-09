@@ -1,3 +1,9 @@
+/* TODO:
+sound muten
+pause button
+computer ki
+*/
+
 if (!sessionStorage.getItem('sound') === null) {
 	sessionStorage.setItem('sound', true);
 }
