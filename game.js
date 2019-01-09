@@ -1,30 +1,31 @@
-// function sound(src) {
-//     this.sound = document.createElement("audio");
-//     this.sound.src = src;
-//     this.sound.setAttribute("preload", "auto");
-//     this.sound.setAttribute("controls", "none");
-//     this.sound.style.display = "none";
-//     document.body.appendChild(this.sound);
-//     this.sound.play();
-// }
-//
-// document.getElementById('spielername').addEventListener('focus', function() {
-// 	var startSound = new sound('sounds/start.ogg');
-// 	// startSound.play();
-// })
-
-var sound = true;
+if (!sessionStorage.getItem('sound') === null) {
+	sessionStorage.setItem('sound', true);
+}
+var sound = sessionStorage.getItem('sound');
 soundicon = document.getElementById("soundicon");
-function togglesound() {
+
+/**
+ * Toggle sound
+ * @author silas229
+ * @return {void}
+ */
+function toggleSound() {
 	if (sound) {
-		sound = false;
+		sessionStorage.setItem('sound', false);
 		soundicon.src = "sound-off.svg";
+		sound.start.pause();
 	} else {
-		sound = true;
+		sessionStorage.setItem('sound', true);
 		soundicon.src = "sound-on.svg";
 	}
+	var sound = sessionStorage.getItem('sound');
 }
 
+/**
+ * Load sounds
+ * @author silas229
+ * @return {object}
+ */
 function loadSounds() {
 	this.start = new Audio("sounds/start.ogg");
 	this.point = new Audio("sounds/point.ogg");
@@ -34,8 +35,9 @@ function loadSounds() {
 	this.lose = new Audio("sounds/lose.ogg");
 	return this;
 }
-sound = loadSounds();
-sound.start.play();
+snd = loadSounds();
+
+if (sound) snd.start.play();
 
 var stopandgo = false;
 pause = document.querySelector("#pause img");
@@ -43,104 +45,261 @@ function togglePause(){
 	if(stopandgo){
 		stopandgo = false;
 		pause.src = "pause.svg";
+		raf = window.requestAnimationFrame(draw);
 	} else {
 			stopandgo = true;
 			pause.src = "play.svg";
+			window.cancelAnimationFrame(raf);
 	}
 }
 
-var Pong = {
-	canvas: false,
-	ctx: false,
-	init: function() {
-		Pong.canvas = document.getElementById('canvas');
-		Pong.ctx = Pong.canvas.getContext('2d');
+/*---------------------------------------------------------*/
 
-/*
-		setIntervall(update,1000/30);
-		Pong.canvas.addEventListener('mousemove',function(e){
-			p1y=e.clientY-ph/2;
-		});
-*/
-		var width = 16;
-		Pong.dx = 2;
-		Pong.dy = -2;
-		Pong.x = Pong.canvas.width/2;
-		Pong.y = Pong.canvas.height-30;
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+ctx.textAlign = "center";
+ctx.fillStyle = "white";
+ctx.strokeStyle = "white";
+ctx.font = "50px Bit5x3";
+//ctx.font = 'bit5x3';
+//let f = new FontFace('bit5x3', 'bit5x3.tff');
+var raf;
+var paddleHeight = 80;
+var paddleWidth = 16;
+var topPressed = false;
+var bottomPressed = false;
+var x = canvas.width/2;
+var y =  canvas.height/2;
+var level = 0;
 
-		window.addEventListener('keydown', function (e) {
-            Pong.key = e.keyCode;
-    })
-    window.addEventListener('keyup', function (e) {
-        Pong.key = false;
-    })
-
-		Pong.ctx.fillStyle = "white";
-		Pong.ctx.strokeStyle = "white";
-		Pong.ctx.lineWidth = width;
-
-		Pong.ctx.setLineDash([width, width]);
-		Pong.ctx.beginPath();
-		Pong.ctx.moveTo(315,-(width/2));
-		Pong.ctx.lineTo(315, 480);
-		Pong.ctx.stroke();
-		Pong.ctx.closePath();
-
-		Pong.draw();
-	},
-	clear: function(){
-    Pong.context.clearRect(0, 0, Pong.canvas.width, Pong.canvas.height);
+var ball = {
+	x: canvas.width/2,
+	y: canvas.height/2,
+  vx: 2,
+  vy: 2,
+  size: 16,
+  //color: 'blue',
+  draw: function() {
+    ctx.beginPath();
+    //ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
+    ctx.rect(this.x,this.y,this.size,this.size);
+    ctx.closePath();
+    //ctx.fillStyle = this.color;
+    ctx.fill();
   },
-	draw: function() {
-		Pong.ctx.beginPath();
-		Pong.ctx.rect(Pong.x,Pong.y,20,20);
-		Pong.ctx.fill();
-		Pong.ctx.closePath();
-		Pong.x += Pong.dx;
-		Pong.y += Pong.dy;
-	},
-	// loop: function() {
-  //   Pong.clear();
-  //   myGamePiece.speedX = 0;
-  //   myGamePiece.speedY = 0;
-  //   if (Pong.key && Pong.key == 37) {myGamePiece.speedX = -1; }
-  //   if (Pong.key && Pong.key == 39) {myGamePiece.speedX = 1; }
-  //   if (Pong.key && Pong.key == 38) {myGamePiece.speedY = -1; }
-  //   if (Pong.key && Pong.key == 40) {myGamePiece.speedY = 1; }
-  //   myGamePiece.newPos();
-  //   myGamePiece.update();
-	// },
-	// setInterval(loop,10);
+	start: function () {
+		this.x = x;
+		this.y = y;
+	}
 };
 
-// requestAnimationFrame(animate, elem);
-
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-var x = canvas.width/2;
-var y = canvas.height-30;
-var dx = 2;
-var dy = -2;
-
-function drawBall() {
+var line = {
+  width: 16,
+  draw: function() {
+    ctx.lineWidth = this.width;
+    ctx.setLineDash([this.width, this.width]);
     ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI*2);
-    ctx.fillStyle = "blue";
-    ctx.fill();
+    ctx.moveTo(x,-(this.width/2));
+    ctx.lineTo(x, 480);
+    ctx.stroke();
     ctx.closePath();
+  }
 }
 
 function draw() {
-    ctx.clearRect(x, y, 10, 10);
-    drawBall();
-    x += dx;
-    y += dy;
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  line.draw();
+  ball.draw();
+	paddlePlayer.draw();
+	paddleComputer.draw();
+	//f.load().then(function() {
+		scoreComputer.draw();
+		scorePlayer.draw();
+	//})
+	rounds.draw(level);
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+
+  //if(ball.y + ball.vy > canvas.height-ballRadius || ball.y + ball.vy < ballRadius) {
+  if (ball.y + ball.vy > canvas.height-ball.size || ball.y + ball.vy < 0) {
+    ball.vy = -ball.vy;
+  }
+  //if(ball.x + ball.vx > canvas.width-ballRadius || ball.x + ball.vx < ballRadius) {
+	if (ball.x + ball.vx > canvas.width-ball.size || (ball.x + ball.vx > canvas.width-paddleWidth && paddleY < ball.y < paddlePlayer.paddleY + paddleHeight)) {
+		ball.vx = -ball.vx;
+		scoreComputer.scoreC++;
+		//ball.start();
+	} else if (ball.x + ball.vx < 0) {
+		ball.vx = -ball.vx;
+		scorePlayer.scoreP++;
+		//ball.start();
+	}
+/*
+for (var i = 0; i < rounds.round.length; i++) {
+	rounds.draw(i);
+}
+*/
+
+	if(scorePlayer.scoreP == 10){
+		alert("Player won.");
+		scorePlayer.won++;
+		scoreComputer.lose++;
+		scorePlayer.goals += scorePlayer.scoreP;
+		scorePlayer.gegoals += scoreComputer.scoreC;
+
+		scoreComputer.goals += scoreComputer.scoreC;
+		scoreComputer.gegoals += scorePlayer.scoreP;
+		if (level == 0) {
+			level++;
+			scorePlayer.scoreP=0;
+			scoreComputer.scoreC=0;
+			ball.vx +=7;
+			ball.vy +=4;
+			ball.start();
+		} else {
+			alert("End Game. Player won.");
+			scorePlayer.scoreP=0;
+			scoreComputer.scoreC=0;
+			endGame();
+		}
+	} else if (scoreComputer.scoreC == 10) {
+		alert("Computer won.");
+		scoreComputer.won++;
+		scorePlayer.lose++;
+		scoreComputer.goals += scoreComputer.scoreC;
+		scoreComputer.gegoals += scorePlayer.scoreP;
+
+		scorePlayer.goals += scorePlayer.scoreP;
+		scorePlayer.gegoals += scoreComputer.scoreC;
+		if (level == 0) {
+			level++;
+			scorePlayer.scoreP=0;
+			scoreComputer.scoreC=0;
+			ball.vx +=7;
+			ball.vy +=4;
+			ball.start();
+		} else {
+			alert("End Game. Computer won.");
+			scorePlayer.scoreP=0;
+			scoreComputer.scoreC=0;
+			endGame();
+		}
+	}
+
+	/*if(ball.x + ball.vx < ball.size) {
+        ball.vx = -ball.vx;
+    }
+    else if(ball.x + ball.vx > canvas.width-ball.size) {
+        if(x > paddleX && x < paddleX + paddleWidth) {
+            ball.vx = -ball.vx;
+        }
+        /*else {
+            alert("GAME OVER");
+            document.location.reload();
+            clearInterval(interval); // Needed for Chrome to end game
+        }
+    }*/
+
+
+	if(bottomPressed && paddlePlayer.paddleY < canvas.height-paddleHeight) {
+    paddlePlayer.paddleY += 7;
+	} else if(topPressed && paddlePlayer.paddleY > 0) {
+    	paddlePlayer.paddleY -= 7;
+		}
+
+  raf = window.requestAnimationFrame(draw);
 }
 
-setInterval(draw, 10);
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
 
-document.getElementById('nameInput').addEventListener('submit', function (event) {
-	event.preventDefault();
+
+canvas.addEventListener('mouseover', function(e){
+  raf = window.requestAnimationFrame(draw);
+});
+
+
+canvas.addEventListener("mouseout",function(e){
+  window.cancelAnimationFrame(raf);
+});
+
+
+function keyDownHandler(e) {
+    if(e.key == "Up" || e.key == "ArrowUp") {
+        topPressed = true;
+    }
+    else if(e.key == "Down" || e.key == "ArrowDown") {
+        bottomPressed = true;
+    }
+}
+
+function keyUpHandler(e) {
+    if(e.key == "Up" || e.key == "ArrowUp") {
+        topPressed = false;
+    }
+    else if(e.key == "Down" || e.key == "ArrowDown") {
+        bottomPressed = false;
+    }
+}
+
+ball.draw();
+
+var paddlePlayer = {
+	paddleY: (canvas.height-paddleHeight)/2,
+	draw: function () {
+		ctx.beginPath();
+		ctx.rect(canvas.width-paddleWidth, this.paddleY, paddleWidth, paddleHeight);
+		ctx.fill();
+		ctx.closePath();
+	}
+}
+
+var paddleComputer = {
+	paddleC: (canvas.height-paddleHeight)/2,
+	draw: function () {
+		ctx.beginPath();
+    ctx.rect(0, this.paddleC, paddleWidth, paddleHeight);
+    ctx.fill();
+    ctx.closePath();
+	}
+}
+
+var scorePlayer = {
+	scoreP: 0,
+	won: 0,
+	lose: 0,
+	goals: 0,
+	gegoals: 0,
+	draw: function () {
+    ctx.fillText(this.scoreP.toString(), canvas.width/4*3, 48);
+		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4*3, 100);
+		ctx.fillText(this.goals.toString()+" : "+this.gegoals.toString(), canvas.width/4*3, 150);
+	}
+}
+
+var scoreComputer = {
+	scoreC: 9,
+	won: 0,
+	lose: 0,
+	goals: 0,
+	gegoals: 0,
+	draw: function () {
+    ctx.fillText(this.scoreC.toString(), canvas.width/4, 48);
+		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4, 100);
+		ctx.fillText(this.goals.toString()+" : "+this.gegoals.toString(), canvas.width/4, 150);
+	}
+}
+
+var rounds = {
+	round: [1,2],
+	draw: function (nr) {
+		ctx.fillText("Round "+this.round[nr].toString(), canvas.width/2, 48);
+	}
+}
+
+/*-------------------------------------------------*/
+
+document.getElementById('senden').addEventListener('click', function () {
 	window.name = document.getElementById("spielername").value;
 	if (window.name == '') {
 		window.name = 'Spieler';
@@ -148,7 +307,6 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 	document.getElementById('name').innerHTML = window.name;
 	document.getElementsByClassName('modal')[0].style.display = 'none';
 	document.getElementById('pause').style.display = 'inline-block';
-	startSnd.pause();
 }, false);
 
 function endGame() {
@@ -157,8 +315,8 @@ function endGame() {
 	}
 	var values = {
 		name: window.name,
-		gewonnen: 3,
-		verloren: 2,
+		gewonnen: scorePlayer.won,
+		verloren: scorePlayer.lose,
 		tore: 17,
 		gegentore: 12
 	};
