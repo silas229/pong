@@ -97,3 +97,20 @@ canvas {
 	border-bottom: 16px solid white;
 	border-top: 16px solid white;
 }
+
+
+/* Your animation code is below! 👇👇👇 */
+___________________________________________
+
+
+@keyframes zurMitteFliegen{
+    0%{
+        }
+    100%{
+        transform: scale(10) translateX(-250%) translateY(100%);
+        }
+}
+
+.restart{
+    animation: zurMitteFliegen .5s 1 0s linear;
+}

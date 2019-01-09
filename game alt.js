@@ -9,7 +9,7 @@
 // }
 //
 // document.getElementById('spielername').addEventListener('focus', function() {
-// 	var startSound = new sound('sounds/start.ogg');
+// 	var startSound = new sound('sounds/reset.ogg');
 // 	// startSound.play();
 // })
 
@@ -28,7 +28,7 @@ function toggleSound() {
 	if (sound) {
 		sessionStorage.setItem('sound', false);
 		soundicon.src = "sound-off.svg";
-		sound.start.pause();
+		sound.reset.pause();
 	} else {
 		sessionStorage.setItem('sound', true);
 		soundicon.src = "sound-on.svg";
@@ -42,7 +42,7 @@ function toggleSound() {
  * @return {object}
  */
 function loadSounds() {
-	this.start = new Audio("sounds/start.ogg");
+	this.start = new Audio("sounds/reset.ogg");
 	this.point = new Audio("sounds/point.ogg");
 	this.side = new Audio("sounds/side.ogg");
 	this.paddle = new Audio("sounds/paddle.ogg");
@@ -52,7 +52,7 @@ function loadSounds() {
 }
 snd = loadSounds();
 
-if (sound) snd.start.play();
+if (sound) snd.reset.play();
 
 var stopandgo = false;
 pause = document.querySelector("#pause img");
@@ -165,7 +165,7 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 	document.getElementById('name').innerHTML = window.name;
 	document.getElementsByClassName('modal')[0].style.display = 'none';
 	document.getElementById('pause').style.display = 'inline-block';
-	snd.start.pause();
+	snd.reset.pause();
 }, false);
 
 function endGame() {
