@@ -125,63 +125,73 @@ function draw() {
     ball.vy = -ball.vy;
   }
   //if(ball.x + ball.vx > canvas.width-ballRadius || ball.x + ball.vx < ballRadius) {
-	if (ball.x + ball.vx > canvas.width-ball.size || (ball.x + ball.vx > canvas.width-paddleWidth && paddleY < ball.y < paddlePlayer.paddleY + paddleHeight)) {
-		ball.vx = -ball.vx;
-		scoreComputer.scoreC++;
-		//ball.start();
-	} else if (ball.x + ball.vx < 0) {
-		ball.vx = -ball.vx;
-		scorePlayer.scoreP++;
-		//ball.start();
+	//if(ball.x + ball.vx > canvas.width-ballRadius || ball.x + ball.vx < ballRadius) {
+	// if (ball.x + ball.vx > canvas.width-paddleWidth-ball.size || (ball.x + ball.vx > canvas.width-paddleWidth && pos < ball.y < paddlePlayer.pos + paddleHeight)) {
+	if (ball.x + ball.vx > canvas.width-paddleWidth-ball.size) {
+		if(paddlePlayer.pos - ball.size < ball.y && ball.y < paddlePlayer.pos + paddleHeight + ball.size) {
+		// if(paddlePlayer.pos- ball.size < ball.y < paddlePlayer.pos + paddleHeight + ball.size) {
+			ball.vx =- ball.vx;
+    } else {
+				scoreComputer.score++;
+				ball.start();
+    }
+	} else if (ball.x + ball.vx < paddleWidth) {
+		if(paddleComputer.pos < ball.y && ball.y < paddleComputer.pos + paddleHeight) {
+			ball.vx =- ball.vx;
+    } else {
+				scorePlayer.score++;
+				ball.start();
+    }
 	}
+
 /*
 for (var i = 0; i < rounds.round.length; i++) {
 	rounds.draw(i);
 }
 */
 
-	if(scorePlayer.scoreP == 10){
+	if(scorePlayer.score == 10){
 		alert("Player won.");
 		scorePlayer.won++;
 		scoreComputer.lose++;
-		scorePlayer.goals += scorePlayer.scoreP;
-		scorePlayer.gegoals += scoreComputer.scoreC;
+		scorePlayer.goals += scorePlayer.score;
+		scorePlayer.gegoals += scoreComputer.score;
 
-		scoreComputer.goals += scoreComputer.scoreC;
-		scoreComputer.gegoals += scorePlayer.scoreP;
+		scoreComputer.goals += scoreComputer.score;
+		scoreComputer.gegoals += scorePlayer.score;
 		if (level == 0) {
 			level++;
-			scorePlayer.scoreP=0;
-			scoreComputer.scoreC=0;
+			scorePlayer.score=0;
+			scoreComputer.score=0;
 			ball.vx +=7;
 			ball.vy +=4;
 			ball.start();
 		} else {
 			alert("End Game. Player won.");
-			scorePlayer.scoreP=0;
-			scoreComputer.scoreC=0;
+			scorePlayer.score=0;
+			scoreComputer.score=0;
 			endGame();
 		}
-	} else if (scoreComputer.scoreC == 10) {
+	} else if (scoreComputer.score == 10) {
 		alert("Computer won.");
 		scoreComputer.won++;
 		scorePlayer.lose++;
-		scoreComputer.goals += scoreComputer.scoreC;
-		scoreComputer.gegoals += scorePlayer.scoreP;
+		scoreComputer.goals += scoreComputer.score;
+		scoreComputer.gegoals += scorePlayer.score;
 
-		scorePlayer.goals += scorePlayer.scoreP;
-		scorePlayer.gegoals += scoreComputer.scoreC;
+		scorePlayer.goals += scorePlayer.score;
+		scorePlayer.gegoals += scoreComputer.score;
 		if (level == 0) {
 			level++;
-			scorePlayer.scoreP=0;
-			scoreComputer.scoreC=0;
+			scorePlayer.score=0;
+			scoreComputer.score=0;
 			ball.vx +=7;
 			ball.vy +=4;
 			ball.start();
 		} else {
 			alert("End Game. Computer won.");
-			scorePlayer.scoreP=0;
-			scoreComputer.scoreC=0;
+			scorePlayer.score=0;
+			scoreComputer.score=0;
 			endGame();
 		}
 	}
@@ -201,10 +211,10 @@ for (var i = 0; i < rounds.round.length; i++) {
     }*/
 
 
-	if(bottomPressed && paddlePlayer.paddleY < canvas.height-paddleHeight) {
-    paddlePlayer.paddleY += 7;
-	} else if(topPressed && paddlePlayer.paddleY > 0) {
-    	paddlePlayer.paddleY -= 7;
+	if(bottomPressed && paddlePlayer.pos < canvas.height-paddleHeight) {
+    paddlePlayer.pos += 7;
+	} else if(topPressed && paddlePlayer.pos > 0) {
+    	paddlePlayer.pos -= 7;
 		}
 
   raf = window.requestAnimationFrame(draw);
@@ -214,15 +224,7 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 
-canvas.addEventListener('mouseover', function(e){
-  raf = window.requestAnimationFrame(draw);
-});
-
-
-canvas.addEventListener("mouseout",function(e){
-  window.cancelAnimationFrame(raf);
-});
-
+window.requestAnimationFrame(draw);
 
 function keyDownHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
@@ -245,46 +247,46 @@ function keyUpHandler(e) {
 ball.draw();
 
 var paddlePlayer = {
-	paddleY: (canvas.height-paddleHeight)/2,
+	pos: (canvas.height-paddleHeight)/2,
 	draw: function () {
 		ctx.beginPath();
-		ctx.rect(canvas.width-paddleWidth, this.paddleY, paddleWidth, paddleHeight);
+		ctx.rect(canvas.width-paddleWidth, this.pos, paddleWidth, paddleHeight);
 		ctx.fill();
 		ctx.closePath();
 	}
 }
 
 var paddleComputer = {
-	paddleC: (canvas.height-paddleHeight)/2,
+	pos: (canvas.height-paddleHeight)/2,
 	draw: function () {
 		ctx.beginPath();
-    ctx.rect(0, this.paddleC, paddleWidth, paddleHeight);
+    ctx.rect(0, this.pos, paddleWidth, paddleHeight);
     ctx.fill();
     ctx.closePath();
 	}
 }
 
 var scorePlayer = {
-	scoreP: 0,
+	score: 0,
 	won: 0,
 	lose: 0,
 	goals: 0,
 	gegoals: 0,
 	draw: function () {
-    ctx.fillText(this.scoreP.toString(), canvas.width/4*3, 48);
+    ctx.fillText(this.score.toString(), canvas.width/4*3, 48);
 		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4*3, 100);
 		ctx.fillText(this.goals.toString()+" : "+this.gegoals.toString(), canvas.width/4*3, 150);
 	}
 }
 
 var scoreComputer = {
-	scoreC: 9,
+	score: 0,
 	won: 0,
 	lose: 0,
 	goals: 0,
 	gegoals: 0,
 	draw: function () {
-    ctx.fillText(this.scoreC.toString(), canvas.width/4, 48);
+    ctx.fillText(this.score.toString(), canvas.width/4, 48);
 		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4, 100);
 		ctx.fillText(this.goals.toString()+" : "+this.gegoals.toString(), canvas.width/4, 150);
 	}

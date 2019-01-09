@@ -71,20 +71,22 @@
 
 
 table {
-	width: 100%;
+	width: 640px;
+	margin: 0 auto;
 }
 
 table td {
 	width: 50%;
+	text-align: center;
 }
 
-table td:nth-child(1) {
+/* table td:nth-child(1) {
 	text-align: right;
 }
 
 table td:nth-child(2) {
 	text-align: left;
-}
+} */
 
 /*Senden und DropDown*/
 .punkte{
