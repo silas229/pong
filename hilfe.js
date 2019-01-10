@@ -1,3 +1,5 @@
+"use strict";
+
 var inhalte = document.getElementsByClassName("inhalt");
 var buttons = document.getElementsByTagName("button");
 function toggle(nr) {
