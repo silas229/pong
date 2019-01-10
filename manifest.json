@@ -1,0 +1,7 @@
+{
+  "name": "Pong",
+  "lang": "de",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000"
+}
