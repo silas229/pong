@@ -98,10 +98,10 @@ canvas {
 	border-top: 16px solid white;
 }
 
-#pause,
+/* #pause,
 #pause img {
 	transition: all 2s ease;
-}
+} */
 
 .restart img {
 	width: 100%;
