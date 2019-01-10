@@ -1,14 +1,10 @@
-/* TODO:
-sound muten
-pause button
-computer ki
-*/
+// "use strict";
 
 if (!sessionStorage.getItem('sound') === null) {
 	sessionStorage.setItem('sound', true);
 }
 var sound = sessionStorage.getItem('sound');
-soundicon = document.getElementById("soundicon");
+var soundicon = document.getElementById("soundicon");
 
 document.getElementById("pause").addEventListener("click", function (event) {
 	event.preventDefault;
