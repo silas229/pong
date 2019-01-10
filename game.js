@@ -1,3 +1,5 @@
+//"use strict";
+
 /* TODO:
 sound muten
 pause button
