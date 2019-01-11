@@ -40,7 +40,7 @@ function loadSounds() {
 	return this;
 }
 snd = loadSounds();
-snd.start.setAttribute("preload", "auto");
+snd.start.play();
 
 if (sound) {snd.start.play();}
 
