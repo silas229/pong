@@ -8,7 +8,6 @@ var soundicon = document.getElementById("soundicon");
 
 /**
  * Toggle sound
- * @author silas229
  * @return {void}
  */
 function toggleSound() {
@@ -27,7 +26,6 @@ function toggleSound() {
 
 /**
  * Load sounds
- * @author silas229
  * @return {object}
  */
 function loadSounds() {
@@ -264,7 +262,6 @@ var game = {
 	},
 	/**
 	* Ends a game
-	* @author silas229
 	*/
 	endGame: function() {
 		if (!localStorage.getItem('increment')) {
@@ -396,7 +393,6 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 
 /**
  * Nachricht ausgeben
- * @author silas229
  * @param  {string} text [description]
  */
 function msg(text) {
