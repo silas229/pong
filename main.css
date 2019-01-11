@@ -1,6 +1,6 @@
 /*Schriftart definieren*/
 @font-face {
-    font-family: 'Bit5x3', sans-serif;
+    font-family: 'Bit5x3';
     src: url('Bit5x3.woff2') format('woff2'),
         url('Bit5x3.woff') format('woff');
     font-weight: normal;
@@ -12,8 +12,10 @@ html, body {
 	margin: 0;
 	background-color: black;
 	color: white;
-	font-family: 'Bit5x3', sans-serif;
+	font-family: 'Bit5x3';
 	text-align: center;
+	font-weight: normal;
+  font-style: normal;
 }
 
 /*Links in Icons weiss*/
