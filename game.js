@@ -22,10 +22,12 @@ function toggleSound() {
 	if (sound) {
 		sessionStorage.setItem('sound', false);
 		soundicon.src = "sound-off.svg";
+		console.log("Ton aus.");
 		sound.reset.pause();
 	} else {
 		sessionStorage.setItem('sound', true);
 		soundicon.src = "sound-on.svg";
+		console.log("Ton an.");
 	}
 	var sound = sessionStorage.getItem('sound');
 }
@@ -54,10 +56,12 @@ function togglePause(){
 	if(stopandgo){
 		stopandgo = false;
 		pause.src = "pause.svg";
+		console.log("Spiel pausiert.");
 		raf = window.requestAnimationFrame(game.draw);
 	} else {
 			stopandgo = true;
 			pause.src = "play.svg";
+			console.log("Spiel gestartet.");
 			window.cancelAnimationFrame(raf);
 	}
 }
@@ -80,9 +84,11 @@ var bottomPressed = false;
 
 var game = {
 	start: function() {
+	console.log("Spiel gestartet.");
 		raf = window.requestAnimationFrame(game.draw);
 	},
 	stop: function() {
+	console.log("Spiel gestoppt.");
 		window.cancelAnimationFrame(raf);
 	}
 }
@@ -150,21 +156,29 @@ var game = {
 	},
 	draw: function() {
 		game.init();
+		console.log("Feld reset und Mittellinie gezeichnet.");
 
 		ball.draw();
 		paddlePlayer.draw();
 		paddleComputer.draw();
+		console.log("Ball und Paddles gezeichnet.");
 
 		game.display();
+		console.log("Computer, Player und Runden gezeichnet.");
 
 		game.ball();
+		console.log("Ball bewegt.");
 
 		if(player.score == 10 || computer.score == 10) {
+			console.log("Ende des Levels.");
 			game.endLevel();
+			console.log("Level beendet.");
 		} else {
+			console.log("Spiel geht weiter.");
 			raf = window.requestAnimationFrame(game.draw);
 		}
 
+		console.log("Paddles bewegen.");
 		game.controls();
 	},
 	display: function() {
@@ -234,6 +248,7 @@ var game = {
 			} else {
 				msg("Ende des Spiels. Computer hat gewonnen!");
 			}
+			console.log("Ende des Spiels.");
 			this.endGame();
 		}
 
@@ -285,18 +300,22 @@ document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         topPressed = true;
+				console.log("Pfeil nach oben.");
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         bottomPressed = true;
+				console.log("Pfeil nach unten.");
     }
 }
 
 function keyUpHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         topPressed = false;
+				console.log("Pfeil nach oben losgelassen.");
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         bottomPressed = false;
+				console.log("Pfeil nach unten losgelassen.");
     }
 }
 
