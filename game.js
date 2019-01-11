@@ -229,7 +229,7 @@ var game = {
 		this.display();
 
 		if (rounds.state == 2) {
-			if (player.score == 10) {
+			if (player.won > computer.won) {
 				msg("Ende des Spiels. " + player.name + " hat gewonnen!");
 			} else {
 				msg("Ende des Spiels. Computer hat gewonnen!");
