@@ -1,15 +1,3 @@
-@font-face {
-	font-family: 'Bit5x3';
-	src: 'bit5x3.ttf';
-}
-
-html, body {
-	margin: 0;
-	background-color: black;
-	text-align: center;
-	font-family: 'Bit5x3';
-}
-
 h1, li {
 	color: white;
 }
@@ -19,10 +7,6 @@ h1 {
 	letter-spacing: 15vw;
 	padding-left: 15vw;
 	margin: 10vh 0;
-}
-
-a[href] {
-	text-decoration: none;
 }
 
 a.btn {
