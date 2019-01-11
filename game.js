@@ -1,32 +1,36 @@
-// "use strict";
+"use strict";
 
-if (!sessionStorage.getItem('sound') === null) {
-	sessionStorage.setItem('sound', true);
+if (!sessionStorage.getItem("sound") === null) {
+	sessionStorage.setItem("sound", true);
 }
-var sound = sessionStorage.getItem('sound');
+var sound = sessionStorage.getItem("sound");
 var soundicon = document.getElementById("soundicon");
+
+document.getElementById("spielername").value = sessionStorage.getItem("name");
 
 /**
  * Toggle sound
  * @return {void}
  */
 function toggleSound() {
+	var icon = document.querySelector("#sound img");
+	sound = sessionStorage.getItem("sound");
 	if (sound) {
-		sessionStorage.setItem('sound', false);
-		soundicon.src = "sound-off.svg";
-		console.log("Ton aus.");
+		sessionStorage.setItem("sound", false);
+		icon.src = "images/sound-off.svg";
+		console.log("Ton aus");
 		// snd.start.pause();
 	} else {
-		sessionStorage.setItem('sound', true);
-		soundicon.src = "sound-on.svg";
-		console.log("Ton an.");
+		sessionStorage.setItem("sound", true);
+		icon.src = "images/sound-on.svg";
+		console.log("Ton an");
 	}
-	var sound = sessionStorage.getItem('sound');
+	var sound = sessionStorage.getItem("sound");
+	console.log(sound);
 }
 
 /**
  * Load sounds
- * @return {object}
  */
 function loadSounds() {
 	this.start = new Audio("sounds/start.ogg");
@@ -37,35 +41,49 @@ function loadSounds() {
 	this.lose = new Audio("sounds/lose.ogg");
 	return this;
 }
-snd = loadSounds();
-snd.start.play();
+var snd = new loadSounds();
 
-if (sound) {snd.start.play();}
+if (sound) snd.start.play();
 
 document.getElementById("pause").addEventListener("click", function (event) {
 	event.preventDefault;
-	this.classList.remove("restart");
-	msg("&nbsp;");
-	toggleSound();
-})
+	if (rounds.state != 3) {
+		this.classList.remove("restart");
+		msg("&nbsp;");
+		toggleSound();
+	} else {
+		location.reload();
+	}
+});
+document.getElementById("sound").addEventListener("click", toggleSound());
 
 var stopandgo = false;
-pause = document.querySelector("#pause img");
+var pause = document.querySelector("#pause img");
+/**
+ * Toggle between play and pause
+ */
 function togglePause(){
-	if(stopandgo){
-		stopandgo = false;
-		pause.src = "pause.svg";
-		console.log("Start.");
-		raf = window.requestAnimationFrame(game.draw);
-	} else {
+	if (rounds.state != 3) {
+		if(stopandgo){
+			stopandgo = false;
+			pause.src = "images/pause.svg";
+			console.log("Fortgefahren");
+			raf = window.requestAnimationFrame(game.draw);
+		} else {
 			stopandgo = true;
-			pause.src = "play.svg";
-			console.log("Pause.");
+			pause.src = "images/play.svg";
+			console.log("Pausiert");
 			window.cancelAnimationFrame(raf);
+		}
+	} else {
+		pause.src = "images/restart.svg";
+		console.log("Neugestartet");
 	}
 }
 
-/*------------------------GAME---------------------------------*/
+// ///////
+// Game //
+//////////
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -83,11 +101,11 @@ var bottomPressed = false;
 
 var game = {
 	start: function() {
-	console.log("Spiel gestartet.");
+	console.log("Spiel gestartet");
 		raf = window.requestAnimationFrame(game.draw);
 	}//,
 	// stop: function() {
-	// console.log("Spiel gestoppt.");
+	// console.log("Spiel gestoppt");
 	// 	window.cancelAnimationFrame(raf);
 	// }
 }
@@ -110,7 +128,7 @@ var ball = {
 		this.x = canvas.width/2 - 8;
 		this.y = canvas.width/2 - 8;
 		this.toggleDir();
-		console.log("Ball in der Mitte.");
+		console.log("Ball in der Mitte");
 	},
 	toggleDir: function() {
 		if (this.vx > 0) {
@@ -147,36 +165,41 @@ var line = {
 }
 
 var game = {
-	init: function() {
+	clear: function() {
 		ctx.clearRect(0,0, canvas.width, canvas.height);
-		line.draw();
 	},
+	/**
+	 * Draw canvas
+	 */
 	draw: function() {
-		game.init();
-		// console.log("Feld reset und Mittellinie gezeichnet.");
+		game.clear();
+		// console.log("Canvas Reset");
+
+		line.draw();
+		// console.log("Mittellinie gezeichnet");
 
 		ball.draw();
 		paddlePlayer.draw();
 		paddleComputer.draw();
-		// console.log("Ball und Paddles gezeichnet.");
+		// console.log("Ball und Paddles gezeichnet");
 
 		game.display();
-		// console.log("Computer, Player und Runden gezeichnet.");
+		// console.log("Computer, Player und Runden gezeichnet");
 
 		game.ball();
-		// console.log("Ball bewegt.");
-		console.log("Neuzeichnung.");
+		// console.log("Ball bewegt");
+		// console.log("Neuzeichnung");
 
 		if(player.score == 10 || computer.score == 10) {
-			console.log("Ende des Levels.");
+			console.log("Ende des Levels");
 			game.endLevel();
-			console.log("Level beendet.");
+			console.log("Level beendet");
 		} else {
-			console.log("Spiel geht weiter.");
+			// console.log("Spiel geht weiter");
 			raf = window.requestAnimationFrame(game.draw);
 		}
 
-		// console.log("Paddles bewegen.");
+		// console.log("Paddles bewegen");
 		game.controls();
 	},
 	display: function() {
@@ -184,30 +207,43 @@ var game = {
 		player.draw()
 		rounds.draw(rounds.state);
 	},
+	/**
+	 * Ball physics
+	 */
 	ball: function () {
+		// Move ball
 		ball.x += ball.vx;
 		ball.y += ball.vy;
+
+		// Bump on the side
 		if (ball.y + ball.vy > canvas.height-ball.size || ball.y + ball.vy < 0) {
 			snd.side.play();
 			ball.vy = -ball.vy;
 		}
+
+		// Player paddle
 		if (ball.x + ball.vx > canvas.width-paddleWidth-ball.size) {
+			// Ball hits Player paddle
 			if(paddlePlayer.pos - ball.size < ball.y && ball.y < paddlePlayer.pos + paddleHeight) {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
 				snd.paddle.play();
 				ball.vx =- ball.vx;
+			// Ball missed Player paddle
 			} else {
 				snd.point.play();
 				computer.score++;
 				ball.reset();
 			}
+		// Computer paddle
 		} else if (ball.x + ball.vx < paddleWidth) {
+			// Ball hits Computer paddle
 			if(paddleComputer.pos - ball.size < ball.y && ball.y < paddleComputer.pos + paddleHeight) {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
 				snd.paddle.play();
 				ball.vx =- ball.vx;
+			// Ball missed Computer paddle
 			} else {
 				snd.point.play();
 				player.score++;
@@ -215,8 +251,11 @@ var game = {
 			}
 		}
 	},
+	/**
+	 * Ends a level
+	 */
 	endLevel: function () {
-		this.init();
+		this.clear();
 
 		player.goals += player.score;
 		player.gegoals += computer.score;
@@ -225,13 +264,13 @@ var game = {
 		computer.gegoals += player.score;
 
 		if(player.score == 10) {
-			console.log(player.name + " hat gewonnen.");
+			console.log(player.name + " hat gewonnen");
 			msg(player.name + " hat gewonnen!");
 			snd.win.play();
 			player.won++;
 			computer.lose++;
 		} else {
-			console.log("Computer hat gewonnen.");
+			console.log("Computer hat gewonnen");
 			msg("Computer hat gewonnen!");
 			snd.lose.play();
 			player.lose++;
@@ -255,7 +294,7 @@ var game = {
 		rounds.state++;
 		player.score = 0;
 		computer.score = 0;
-		console.log("Spielstand auf 0.");
+		console.log("Spielstand auf 0");
 
 		togglePause();
 		document.getElementById("pause").classList.add("restart");
@@ -289,7 +328,7 @@ var game = {
 }
 
 // window.addEventListener("gamepadconnected", function(e) {
-//   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+//   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes",
 //     e.gamepad.index, e.gamepad.id,
 //     e.gamepad.buttons.length, e.gamepad.axes.length);
 // });
@@ -300,27 +339,30 @@ document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         topPressed = true;
-				console.log("Pfeil nach oben.");
+				console.log("Pfeiltaste Oben gedrückt");
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         bottomPressed = true;
-				console.log("Pfeil nach unten.");
+				console.log("Pfeiltaste Unten gedrückt");
     }
 }
 
 function keyUpHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         topPressed = false;
-				console.log("Pfeil nach oben losgelassen.");
+				console.log("Pfeiltaste Oben losgelassen");
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         bottomPressed = false;
-				console.log("Pfeil nach unten losgelassen.");
+				console.log("Pfeiltaste Unten losgelassen");
     }
 }
 
 var paddlePlayer = {
 	pos: (canvas.height-paddleHeight)/2,
+	/**
+	 * Draw Player paddle
+	 */
 	draw: function () {
 		ctx.beginPath();
 		ctx.rect(canvas.width-paddleWidth, this.pos, paddleWidth, paddleHeight);
@@ -331,6 +373,9 @@ var paddlePlayer = {
 
 var paddleComputer = {
 	pos: (canvas.height-paddleHeight)/2,
+	/**
+	 * Draw Computer paddle
+	 */
 	draw: function () {
 		ctx.beginPath();
     ctx.rect(0, this.pos, paddleWidth, paddleHeight);
@@ -346,6 +391,9 @@ var player = {
 	lose: 0,
 	goals: 0,
 	gegoals: 0,
+	/**
+	 * Display Player stats
+	 */
 	draw: function () {
     ctx.fillText(this.score.toString(), canvas.width/4*3, 48);
 		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4*3, 100);
@@ -359,6 +407,9 @@ var computer = {
 	lose: 0,
 	goals: 0,
 	gegoals: 0,
+	/**
+	 * Display Computer stats
+	 */
 	draw: function () {
     ctx.fillText(this.score.toString(), canvas.width/4, 48);
 		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4, 100);
@@ -369,21 +420,28 @@ var computer = {
 var rounds = {
 	state: 2,
 	round: [1,2,3],
+	/**
+	 * Display the actual round
+	 * @param  {nr} nr
+	 */
 	draw: function (nr) {
 		ctx.fillText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
+		ctx.strokeStyle = "black";
+		ctx.lineWidth = "1";
+		ctx.strokeText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
+		ctx.strokeStyle = "white";
 	}
 }
 
-/*----------------------COMPUTER---------------------------*/
-
-
-
-/*-------------------------------------------------*/
-
+/**
+ * Name form handling
+ * @param  {object} event
+ */
 document.getElementById('nameInput').addEventListener('submit', function (event) {
 	event.preventDefault();
 	if (document.getElementById("spielername").value != '') {
 		player.name = document.getElementById("spielername").value;
+		sessionStorage.setItem("name", player.name);
 	}
 	document.getElementById('name').innerHTML = player.name;
 	document.getElementsByClassName('modal')[0].style.display = 'none';
