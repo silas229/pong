@@ -1,7 +1,10 @@
 /*Schriftart definieren*/
 @font-face {
-	font-family: 'Bit5x3', sans-serif;
-	src: 'bit5x3.ttf';
+    font-family: 'Bit5x3', sans-serif;
+    src: url('Bit5x3.woff2') format('woff2'),
+        url('Bit5x3.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
 /*Richtlinien komplettes Dokument - Body ist mit Hintergrund*/
