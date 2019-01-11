@@ -6,13 +6,6 @@ if (!sessionStorage.getItem('sound') === null) {
 var sound = sessionStorage.getItem('sound');
 var soundicon = document.getElementById("soundicon");
 
-document.getElementById("pause").addEventListener("click", function (event) {
-	event.preventDefault;
-	this.classList.remove("restart");
-	msg("&nbsp;");
-	toggleSound();
-})
-
 /**
  * Toggle sound
  * @author silas229
@@ -23,7 +16,7 @@ function toggleSound() {
 		sessionStorage.setItem('sound', false);
 		soundicon.src = "sound-off.svg";
 		console.log("Ton aus.");
-		sound.reset.pause();
+		// snd.start.pause();
 	} else {
 		sessionStorage.setItem('sound', true);
 		soundicon.src = "sound-on.svg";
@@ -47,8 +40,16 @@ function loadSounds() {
 	return this;
 }
 snd = loadSounds();
+snd.start.setAttribute("preload", "auto");
 
-if (sound) snd.start.play();
+if (sound) {snd.start.play();}
+
+document.getElementById("pause").addEventListener("click", function (event) {
+	event.preventDefault;
+	this.classList.remove("restart");
+	msg("&nbsp;");
+	toggleSound();
+})
 
 var stopandgo = false;
 pause = document.querySelector("#pause img");
@@ -56,17 +57,17 @@ function togglePause(){
 	if(stopandgo){
 		stopandgo = false;
 		pause.src = "pause.svg";
-		console.log("Pause.");
+		console.log("Start.");
 		raf = window.requestAnimationFrame(game.draw);
 	} else {
 			stopandgo = true;
 			pause.src = "play.svg";
-			console.log("Start.");
+			console.log("Pause.");
 			window.cancelAnimationFrame(raf);
 	}
 }
 
-/*---------------------------------------------------------*/
+/*------------------------GAME---------------------------------*/
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -249,7 +250,6 @@ var game = {
 				console.log("Ende des Spiels. Computer hat gewonnen!");
 				msg("Ende des Spiels. Computer hat gewonnen!");
 			}
-			console.log("Ende des Spiels.");
 			this.endGame();
 		}
 
@@ -370,12 +370,16 @@ var computer = {
 }
 
 var rounds = {
-	state: 0,
+	state: 2,
 	round: [1,2,3],
 	draw: function (nr) {
 		ctx.fillText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
 	}
 }
+
+/*----------------------COMPUTER---------------------------*/
+
+
 
 /*-------------------------------------------------*/
 
