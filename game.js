@@ -56,12 +56,12 @@ function togglePause(){
 	if(stopandgo){
 		stopandgo = false;
 		pause.src = "pause.svg";
-		console.log("Spiel pausiert.");
+		console.log("Pause.");
 		raf = window.requestAnimationFrame(game.draw);
 	} else {
 			stopandgo = true;
 			pause.src = "play.svg";
-			console.log("Spiel gestartet.");
+			console.log("Start.");
 			window.cancelAnimationFrame(raf);
 	}
 }
@@ -86,11 +86,11 @@ var game = {
 	start: function() {
 	console.log("Spiel gestartet.");
 		raf = window.requestAnimationFrame(game.draw);
-	},
-	stop: function() {
-	console.log("Spiel gestoppt.");
-		window.cancelAnimationFrame(raf);
-	}
+	}//,
+	// stop: function() {
+	// console.log("Spiel gestoppt.");
+	// 	window.cancelAnimationFrame(raf);
+	// }
 }
 
 var ball = {
@@ -101,19 +101,17 @@ var ball = {
   size: 16,
 	x: canvas.width/2 - 8,
 	y: canvas.height/2 -8,
-  //color: 'blue',
   draw: function() {
     ctx.beginPath();
-    //ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
     ctx.rect(this.x,this.y,this.size,this.size);
     ctx.closePath();
-    //ctx.fillStyle = this.color;
     ctx.fill();
   },
 	reset: function () {
 		this.x = canvas.width/2 - 8;
 		this.y = canvas.width/2 - 8;
 		this.toggleDir();
+		console.log("Ball in der Mitte.");
 	},
 	toggleDir: function() {
 		if (this.vx > 0) {
@@ -127,13 +125,13 @@ var ball = {
 			this.vy = -2;
 		}
 	},
-	startDir: function() {
-  	if ((Math.floor(Math.random() * (Math.floor(1) - Math.ceil(0) + 1)) + 0) == 1){
-			return 2;
-		} else {
-			return -2;
-		}
-	}
+	// startDir: function() {
+  // 	if ((Math.floor(Math.random() * (Math.floor(1) - Math.ceil(0) + 1)) + 0) == 1){
+	// 		return 2;
+	// 	} else {
+	// 		return -2;
+	// 	}
+	// }
 }
 
 var line = {
@@ -156,18 +154,19 @@ var game = {
 	},
 	draw: function() {
 		game.init();
-		console.log("Feld reset und Mittellinie gezeichnet.");
+		// console.log("Feld reset und Mittellinie gezeichnet.");
 
 		ball.draw();
 		paddlePlayer.draw();
 		paddleComputer.draw();
-		console.log("Ball und Paddles gezeichnet.");
+		// console.log("Ball und Paddles gezeichnet.");
 
 		game.display();
-		console.log("Computer, Player und Runden gezeichnet.");
+		// console.log("Computer, Player und Runden gezeichnet.");
 
 		game.ball();
-		console.log("Ball bewegt.");
+		// console.log("Ball bewegt.");
+		console.log("Neuzeichnung.");
 
 		if(player.score == 10 || computer.score == 10) {
 			console.log("Ende des Levels.");
@@ -178,7 +177,7 @@ var game = {
 			raf = window.requestAnimationFrame(game.draw);
 		}
 
-		console.log("Paddles bewegen.");
+		// console.log("Paddles bewegen.");
 		game.controls();
 	},
 	display: function() {
@@ -227,13 +226,13 @@ var game = {
 		computer.gegoals += player.score;
 
 		if(player.score == 10) {
-
+			console.log(player.name + " hat gewonnen.");
 			msg(player.name + " hat gewonnen!");
 			snd.win.play();
 			player.won++;
 			computer.lose++;
 		} else {
-
+			console.log("Computer hat gewonnen.");
 			msg("Computer hat gewonnen!");
 			snd.lose.play();
 			player.lose++;
@@ -244,17 +243,21 @@ var game = {
 
 		if (rounds.state == 2) {
 			if (player.won > computer.won) {
+				console.log("Ende des Spiels. " + player.name + " hat gewonnen!");
 				msg("Ende des Spiels. " + player.name + " hat gewonnen!");
 			} else {
+				console.log("Ende des Spiels. Computer hat gewonnen!");
 				msg("Ende des Spiels. Computer hat gewonnen!");
 			}
 			console.log("Ende des Spiels.");
 			this.endGame();
 		}
 
+		console.log(rounds.state);
 		rounds.state++;
 		player.score = 0;
 		computer.score = 0;
+		console.log("Spielstand auf 0.");
 
 		togglePause();
 		document.getElementById("pause").classList.add("restart");
@@ -288,11 +291,11 @@ var game = {
 	}
 }
 
-window.addEventListener("gamepadconnected", function(e) {
-  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
-    e.gamepad.index, e.gamepad.id,
-    e.gamepad.buttons.length, e.gamepad.axes.length);
-});
+// window.addEventListener("gamepadconnected", function(e) {
+//   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+//     e.gamepad.index, e.gamepad.id,
+//     e.gamepad.buttons.length, e.gamepad.axes.length);
+// });
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
