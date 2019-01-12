@@ -5,10 +5,10 @@ var soundicon = document.getElementById("soundicon");
 function togglesound() {
 	if (sound) {
 		sound = false;
-		soundicon.src = "sound-off.svg";
+		soundicon.src = "images/sound-off.svg";
 	} else {
 		sound = true;
-		soundicon.src = "sound-on.svg";
+		soundicon.src = "images/sound-on.svg";
 	}
 }
 
