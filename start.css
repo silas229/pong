@@ -18,6 +18,7 @@ a.btn {
 	transition: padding 0.5s;
 	display: block;
 	width: fit-content;
+	width: -moz-fit-content;
 	margin: 0 auto 5vh auto;
 }
 
