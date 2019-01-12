@@ -1,7 +1,7 @@
-// "use strict";
+"use strict";
 
 var sound = true;
-soundicon = document.getElementById("soundicon");
+var soundicon = document.getElementById("soundicon");
 function togglesound() {
 	if (sound) {
 		sound = false;
