@@ -47,7 +47,7 @@ if (sound) snd.start.play();
 
 document.getElementById("pause").addEventListener("click", function (event) {
 	event.preventDefault;
-	if (rounds.state != 3) {
+	if (rounds.state < rounds.round.length) {
 		this.classList.remove("restart");
 		msg("&nbsp;");
 		toggleSound();
@@ -63,7 +63,7 @@ var pause = document.querySelector("#pause img");
  * Toggle between play and pause
  */
 function togglePause(){
-	if (rounds.state != 3) {
+	if (rounds.state < rounds.round.length) {
 		if(stopandgo){
 			stopandgo = false;
 			pause.src = "images/pause.svg";
@@ -81,7 +81,7 @@ function togglePause(){
 	}
 }
 
-// ///////
+//////////
 // Game //
 //////////
 
@@ -279,7 +279,7 @@ var game = {
 
 		this.display();
 
-		if (rounds.state == 2) {
+		if (rounds.state == rounds.round.length - 1) {
 			if (player.won > computer.won) {
 				console.log("Ende des Spiels. " + player.name + " hat gewonnen!");
 				msg("Ende des Spiels. " + player.name + " hat gewonnen!");
