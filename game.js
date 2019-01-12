@@ -1,49 +1,66 @@
 "use strict";
 
-if (!sessionStorage.getItem("sound") === null) {
-	sessionStorage.setItem("sound", true);
+var sounds = {
+	icon: document.querySelector("#sound img"),
+	// active: sessionStorage.getItem("sound"),
+	active: sessionStorage.getItem("sound"),
+	/**
+	 * Load sounds
+	 */
+	load: function () {
+		this.start = new Audio("sounds/start.ogg");
+		this.point = new Audio("sounds/point.ogg");
+		this.side = new Audio("sounds/side.ogg");
+		this.paddle = new Audio("sounds/paddle.ogg");
+		this.win = new Audio("sounds/win.ogg");
+		this.lose = new Audio("sounds/lose.ogg");
+		return this;
+	},
+	/**
+	 * Update sound button
+	 */
+	update: function () {
+		if (sessionStorage.getItem("sound") === null) {
+			sessionStorage.setItem("sound", true);
+			// this.active = true;
+		}
+		console.log("Sound: " + this.active);
+
+		if (this.active) {
+			snd.start.play();
+		} else {
+			this.icon.src = "images/sound-off.svg";
+		}
+	},
+	/**
+	 * Toggle sound
+	 */
+	toggle: function () {
+		snd.start.muted = this.active;
+		snd.point.muted = this.active;
+		snd.side.muted = this.active;
+		snd.paddle.muted = this.active;
+		snd.win.muted = this.active;
+		snd.lose.muted = this.active;
+		if (this.active) {
+			sessionStorage.setItem("sound", false);
+			this.active = false;
+			this.icon.src = "images/sound-off.svg";
+			console.log("Ton aus");
+		} else {
+			sessionStorage.setItem("sound", true);
+			this.active = true;
+			this.icon.src = "images/sound-on.svg";
+			console.log("Ton an");
+		}
+	},
 }
-var sound = sessionStorage.getItem("sound");
-var soundicon = document.getElementById("soundicon");
+
+var snd = new sounds.load();
+
+sounds.update();
 
 document.getElementById("spielername").value = sessionStorage.getItem("name");
-
-/**
- * Toggle sound
- * @return {void}
- */
-function toggleSound() {
-	var icon = document.querySelector("#sound img");
-	sound = sessionStorage.getItem("sound");
-	if (sound) {
-		sessionStorage.setItem("sound", false);
-		icon.src = "images/sound-off.svg";
-		console.log("Ton aus");
-		// snd.start.pause();
-	} else {
-		sessionStorage.setItem("sound", true);
-		icon.src = "images/sound-on.svg";
-		console.log("Ton an");
-	}
-	var sound = sessionStorage.getItem("sound");
-	console.log(sound);
-}
-
-/**
- * Load sounds
- */
-function loadSounds() {
-	this.start = new Audio("sounds/start.ogg");
-	this.point = new Audio("sounds/point.ogg");
-	this.side = new Audio("sounds/side.ogg");
-	this.paddle = new Audio("sounds/paddle.ogg");
-	this.win = new Audio("sounds/win.ogg");
-	this.lose = new Audio("sounds/lose.ogg");
-	return this;
-}
-var snd = new loadSounds();
-
-if (sound) snd.start.play();
 
 document.getElementById("pause").addEventListener("click", function (event) {
 	event.preventDefault;
@@ -55,7 +72,7 @@ document.getElementById("pause").addEventListener("click", function (event) {
 		location.reload();
 	}
 });
-document.getElementById("sound").addEventListener("click", toggleSound());
+document.getElementById("sound").addEventListener("click", function() {sounds.toggle();});
 
 var stopandgo = false;
 var pause = document.querySelector("#pause img");
@@ -217,7 +234,7 @@ var game = {
 
 		// Bump on the side
 		if (ball.y + ball.vy > canvas.height-ball.size || ball.y + ball.vy < 0) {
-			snd.side.play();
+			if (sounds.active) snd.side.play();
 			ball.vy = -ball.vy;
 		}
 
@@ -227,11 +244,11 @@ var game = {
 			if(paddlePlayer.pos - ball.size < ball.y && ball.y < paddlePlayer.pos + paddleHeight) {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
-				snd.paddle.play();
+				if (sounds.active) snd.paddle.play();
 				ball.vx =- ball.vx;
 			// Ball missed Player paddle
 			} else {
-				snd.point.play();
+				if (sounds.active) snd.point.play();
 				computer.score++;
 				ball.reset();
 			}
@@ -241,11 +258,11 @@ var game = {
 			if(paddleComputer.pos - ball.size < ball.y && ball.y < paddleComputer.pos + paddleHeight) {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
-				snd.paddle.play();
+				if (sounds.active) snd.paddle.play();
 				ball.vx =- ball.vx;
 			// Ball missed Computer paddle
 			} else {
-				snd.point.play();
+				if (sounds.active) snd.point.play();
 				player.score++;
 				ball.reset();
 			}
@@ -266,13 +283,13 @@ var game = {
 		if(player.score == 10) {
 			console.log(player.name + " hat gewonnen");
 			msg(player.name + " hat gewonnen!");
-			snd.win.play();
+			if (sounds.active) snd.win.play();
 			player.won++;
 			computer.lose++;
 		} else {
 			console.log("Computer hat gewonnen");
 			msg("Computer hat gewonnen!");
-			snd.lose.play();
+			if (sounds.active) snd.lose.play();
 			player.lose++;
 			computer.won++;
 		}
@@ -447,7 +464,7 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 	document.getElementsByClassName('modal')[0].style.display = 'none';
 	document.getElementById('pause').style.display = 'inline-block';
 	window.requestAnimationFrame(game.draw);
-	snd.start.pause();
+	if (sounds.active) snd.start.pause();
 }, false);
 
 /**

@@ -1,17 +1,5 @@
 "use strict";
 
-var sound = true;
-var soundicon = document.getElementById("soundicon");
-function togglesound() {
-	if (sound) {
-		sound = false;
-		soundicon.src = "images/sound-off.svg";
-	} else {
-		sound = true;
-		soundicon.src = "images/sound-on.svg";
-	}
-}
-
 var anzahl = parseInt(localStorage.getItem('increment'));
 
 var val, row, table = document.getElementsByTagName('tbody')[0];
