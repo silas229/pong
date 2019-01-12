@@ -50,7 +50,7 @@ document.getElementById("pause").addEventListener("click", function (event) {
 	if (rounds.state < rounds.round.length) {
 		this.classList.remove("restart");
 		msg("&nbsp;");
-		toggleSound();
+		togglePause();
 	} else {
 		location.reload();
 	}
@@ -426,10 +426,10 @@ var rounds = {
 	 */
 	draw: function (nr) {
 		ctx.fillText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
-		ctx.strokeStyle = "black";
-		ctx.lineWidth = "1";
-		ctx.strokeText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
-		ctx.strokeStyle = "white";
+		// ctx.strokeStyle = "black";
+		// ctx.lineWidth = "1";
+		// ctx.strokeText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
+		// ctx.strokeStyle = "white";
 	}
 }
 
@@ -447,6 +447,7 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 	document.getElementsByClassName('modal')[0].style.display = 'none';
 	document.getElementById('pause').style.display = 'inline-block';
 	window.requestAnimationFrame(game.draw);
+	snd.start.pause();
 }, false);
 
 /**
