@@ -3,7 +3,6 @@
 var sounds = {
 	icon: document.querySelector("#sound img"),
 	// active: sessionStorage.getItem("sound"),
-	active: sessionStorage.getItem("sound"),
 	/**
 	 * Load sounds
 	 */
@@ -17,29 +16,35 @@ var sounds = {
 		return this;
 	},
 	/**
+	 * Check active state
+	 * @return {boolean}
+	 */
+	check: function () {
+		if (sessionStorage.getItem("sound") === null) {
+			sessionStorage.setItem("sound", true);
+		}
+		this.active = sessionStorage.getItem("sound");
+		console.log("Sound: " + this.active);
+
+		if (!this.active) alert("Hi");
+
+	},
+	/**
 	 * Update sound button
 	 */
 	update: function () {
-		if (sessionStorage.getItem("sound") === null) {
-			sessionStorage.setItem("sound", true);
-			this.active = true;
-		}
-		console.log("Sound: " + this.active);
 
-		snd.start.play();
-
-		if (!this.active) this.icon.src = "images/sound-off.svg";
+		snd.start.muted = !this.active;
+		snd.point.muted = !this.active;
+		snd.side.muted = !this.active;
+		snd.paddle.muted = !this.active;
+		snd.win.muted = !this.active;
+		snd.lose.muted = !this.active;
 	},
 	/**
 	 * Toggle sound
 	 */
 	toggle: function () {
-		snd.start.muted = this.active;
-		snd.point.muted = this.active;
-		snd.side.muted = this.active;
-		snd.paddle.muted = this.active;
-		snd.win.muted = this.active;
-		snd.lose.muted = this.active;
 		if (this.active) {
 			sessionStorage.setItem("sound", false);
 			this.active = false;
@@ -51,12 +56,16 @@ var sounds = {
 			this.icon.src = "images/sound-on.svg";
 			console.log("Ton an");
 		}
-	},
+		this.update();
+	}
 }
 
 var snd = new sounds.load();
 
+sounds.check();
 sounds.update();
+
+snd.start.play();
 
 document.getElementById("spielername").value = sessionStorage.getItem("name");
 
@@ -114,22 +123,7 @@ var paddleWidth = 16;
 var topPressed = false;
 var bottomPressed = false;
 
-var game = {
-	start: function() {
-	console.log("Spiel gestartet");
-		raf = window.requestAnimationFrame(game.draw);
-	}//,
-	// stop: function() {
-	// console.log("Spiel gestoppt");
-	// 	window.cancelAnimationFrame(raf);
-	// }
-}
-
 var ball = {
-  // vx: function(){this.startDir();},
-	// vy: function(){this.startDir();},
-	vx: 2,
-	vy: -2,
   size: 16,
 	x: canvas.width/2 - 8,
 	y: canvas.height/2 -8,
@@ -141,29 +135,29 @@ var ball = {
   },
 	reset: function () {
 		this.x = canvas.width/2 - 8;
-		this.y = canvas.width/2 - 8;
+		this.y = canvas.height/2 - 8 + (Math.floor(Math.random() * (Math.floor(80) + Math.ceil(80))) - 80);
 		this.toggleDir();
 		console.log("Ball in der Mitte");
 	},
 	toggleDir: function() {
 		if (this.vx > 0) {
-			this.vx = -2;
+			this.vx = -2 * (rounds.state + 1);
 		} else {
-			this.vx = 2;
+			this.vx = 2 * (rounds.state + 1);
 		}
 		if (this.vy > 0) {
-			this.vy = 2;
+			this.vy = 2 * (rounds.state + 1);
 		} else {
-			this.vy = -2;
+			this.vy = -2 * (rounds.state + 1);
 		}
 	},
-	// startDir: function() {
-  // 	if ((Math.floor(Math.random() * (Math.floor(1) - Math.ceil(0) + 1)) + 0) == 1){
-	// 		return 2;
-	// 	} else {
-	// 		return -2;
-	// 	}
-	// }
+	startDir: function() {
+  	if ((Math.floor(Math.random() * (Math.floor(1) - Math.ceil(0) + 1)) + 0) == 1){
+			return 2;
+		} else {
+			return -2;
+		}
+	}
 }
 
 var line = {
@@ -180,6 +174,14 @@ var line = {
 }
 
 var game = {
+	start: function () {
+		ball.vx = ball.startDir();
+		ball.vy = ball.startDir();
+
+		raf = window.requestAnimationFrame(game.draw);
+		console.log("Spiel gestartet");
+
+	},
 	clear: function() {
 		ctx.clearRect(0,0, canvas.width, canvas.height);
 	},
@@ -250,6 +252,8 @@ var game = {
 				snd.point.play();
 				computer.score++;
 				ball.reset();
+				paddlePlayer.reset();
+				paddleComputer.reset();
 			}
 		// Computer paddle
 		} else if (ball.x + ball.vx < paddleWidth) {
@@ -265,6 +269,8 @@ var game = {
 				snd.point.play();
 				player.score++;
 				ball.reset();
+				paddlePlayer.reset();
+				paddleComputer.reset();
 			}
 		}
 	},
@@ -367,7 +373,9 @@ function keyDownHandler(e) {
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         bottomPressed = true;
-    }
+    } else if (e.code == "Space") {
+			togglePause();
+		}
 }
 
 function keyUpHandler(e) {
@@ -382,7 +390,7 @@ function keyUpHandler(e) {
 }
 
 var paddlePlayer = {
-	pos: (canvas.height-paddleHeight)/2,
+	pos: (canvas.height - paddleHeight)/2,
 	speed: 7,
 	/**
 	 * Draw Player paddle
@@ -392,6 +400,10 @@ var paddlePlayer = {
 		ctx.rect(canvas.width-paddleWidth, this.pos, paddleWidth, paddleHeight);
 		ctx.fill();
 		ctx.closePath();
+	},
+	reset: function () {
+		this.pos = (canvas.height - paddleHeight)/2;
+		this.speed = 7 * (rounds.state + 1);
 	}
 }
 
@@ -405,11 +417,14 @@ var paddleComputer = {
     ctx.rect(0, this.pos, paddleWidth, paddleHeight);
     ctx.fill();
     ctx.closePath();
+	},
+	reset: function () {
+		this.pos = (canvas.height-paddleHeight)/2;
 	}
 }
 
 var player = {
-	score: 9,
+	score: 0,
 	name: "Spieler",
 	won: 0,
 	lose: 0,
@@ -442,7 +457,7 @@ var computer = {
 }
 
 var rounds = {
-	state: 2,
+	state: 0,
 	round: [1,2,3],
 	/**
 	 * Display the actual round
@@ -470,7 +485,7 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 	document.getElementById('name').innerHTML = player.name;
 	document.getElementsByClassName('modal')[0].style.display = 'none';
 	document.getElementById('pause').style.display = 'inline-block';
-	window.requestAnimationFrame(game.draw);
+	game.start();
 	snd.start.pause();
 }, false);
 
