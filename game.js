@@ -22,15 +22,13 @@ var sounds = {
 	update: function () {
 		if (sessionStorage.getItem("sound") === null) {
 			sessionStorage.setItem("sound", true);
-			// this.active = true;
+			this.active = true;
 		}
 		console.log("Sound: " + this.active);
 
-		if (this.active) {
-			snd.start.play();
-		} else {
-			this.icon.src = "images/sound-off.svg";
-		}
+		snd.start.play();
+
+		if (!this.active) this.icon.src = "images/sound-off.svg";
 	},
 	/**
 	 * Toggle sound
@@ -84,12 +82,12 @@ function togglePause(){
 		if(stopandgo){
 			stopandgo = false;
 			pause.src = "images/pause.svg";
-			console.log("Fortgefahren");
+			console.log("%cFortgefahren", "color: green");
 			raf = window.requestAnimationFrame(game.draw);
 		} else {
 			stopandgo = true;
 			pause.src = "images/play.svg";
-			console.log("Pausiert");
+			console.log("%cPausiert", "color: red");
 			window.cancelAnimationFrame(raf);
 		}
 	} else {
@@ -217,7 +215,7 @@ var game = {
 		}
 
 		// console.log("Paddles bewegen");
-		game.controls();
+		game.move();
 	},
 	display: function() {
 		computer.draw();
@@ -234,7 +232,7 @@ var game = {
 
 		// Bump on the side
 		if (ball.y + ball.vy > canvas.height-ball.size || ball.y + ball.vy < 0) {
-			if (sounds.active) snd.side.play();
+			snd.side.play();
 			ball.vy = -ball.vy;
 		}
 
@@ -244,11 +242,12 @@ var game = {
 			if(paddlePlayer.pos - ball.size < ball.y && ball.y < paddlePlayer.pos + paddleHeight) {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
-				if (sounds.active) snd.paddle.play();
+				paddlePlayer.speed *= 1.2;
+				snd.paddle.play();
 				ball.vx =- ball.vx;
 			// Ball missed Player paddle
 			} else {
-				if (sounds.active) snd.point.play();
+				snd.point.play();
 				computer.score++;
 				ball.reset();
 			}
@@ -258,11 +257,12 @@ var game = {
 			if(paddleComputer.pos - ball.size < ball.y && ball.y < paddleComputer.pos + paddleHeight) {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
-				if (sounds.active) snd.paddle.play();
+				paddlePlayer.speed *= 1.2;
+				snd.paddle.play();
 				ball.vx =- ball.vx;
 			// Ball missed Computer paddle
 			} else {
-				if (sounds.active) snd.point.play();
+				snd.point.play();
 				player.score++;
 				ball.reset();
 			}
@@ -281,15 +281,15 @@ var game = {
 		computer.gegoals += player.score;
 
 		if(player.score == 10) {
-			console.log(player.name + " hat gewonnen");
+			console.log("%c" + player.name + " hat gewonnen", "color: green");
 			msg(player.name + " hat gewonnen!");
-			if (sounds.active) snd.win.play();
+			snd.win.play();
 			player.won++;
 			computer.lose++;
 		} else {
-			console.log("Computer hat gewonnen");
+			console.log("%cComputer hat gewonnen", "color: red");
 			msg("Computer hat gewonnen!");
-			if (sounds.active) snd.lose.play();
+			snd.lose.play();
 			player.lose++;
 			computer.won++;
 		}
@@ -335,12 +335,20 @@ var game = {
 		localStorage.setItem('game'+localStorage.getItem('increment'), JSON.stringify(values));
 		localStorage.setItem('increment', parseInt(localStorage.getItem('increment')) + 1);
 	},
-	controls: function () {
-		if(bottomPressed && paddlePlayer.pos < canvas.height-paddleHeight) {
-			paddlePlayer.pos += 7;
+	move: function () {
+		if(bottomPressed && paddlePlayer.pos < canvas.height - paddleHeight) {
+			paddlePlayer.pos += paddlePlayer.speed;
 		} else if(topPressed && paddlePlayer.pos > 0) {
-			paddlePlayer.pos -= 7;
+			paddlePlayer.pos -= paddlePlayer.speed;
 		}
+
+		// unten
+		if(ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight + paddleHeight/2 - ball.size/2 + 2) {
+			paddleComputer.pos = ball.y - paddleHeight/2 + ball.size/2;
+		} else {
+			console.log("Paddle nicht bewegt");
+		}
+		// console.log("Ball "+ball.y + " Paddle "+(paddleComputer.pos + paddleHeight/2 - ball.size/2));
 	}
 }
 
@@ -356,11 +364,9 @@ document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         topPressed = true;
-				console.log("Pfeiltaste Oben gedrückt");
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         bottomPressed = true;
-				console.log("Pfeiltaste Unten gedrückt");
     }
 }
 
@@ -377,6 +383,7 @@ function keyUpHandler(e) {
 
 var paddlePlayer = {
 	pos: (canvas.height-paddleHeight)/2,
+	speed: 7,
 	/**
 	 * Draw Player paddle
 	 */
@@ -442,11 +449,11 @@ var rounds = {
 	 * @param  {nr} nr
 	 */
 	draw: function (nr) {
+		ctx.strokeStyle = "black";
+		ctx.lineWidth = "4";
+		ctx.strokeText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
+		ctx.strokeStyle = "white";
 		ctx.fillText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
-		// ctx.strokeStyle = "black";
-		// ctx.lineWidth = "1";
-		// ctx.strokeText("Runde "+this.round[nr].toString(), canvas.width/2, 48);
-		// ctx.strokeStyle = "white";
 	}
 }
 
@@ -464,7 +471,7 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 	document.getElementsByClassName('modal')[0].style.display = 'none';
 	document.getElementById('pause').style.display = 'inline-block';
 	window.requestAnimationFrame(game.draw);
-	if (sounds.active) snd.start.pause();
+	snd.start.pause();
 }, false);
 
 /**
