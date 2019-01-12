@@ -16,6 +16,9 @@ a.btn {
 	text-decoration: none;
 	padding: 8px 64px;
 	transition: padding 0.5s;
+	display: block;
+	width: fit-content;
+	margin: 0 auto 5vh auto;
 }
 
 a.btn:hover {
@@ -31,17 +34,18 @@ a.btn:hover::after {
 }
 
 ul {
-	margin-top: 10vh;
+	margin-top: 5vh;
 	display: flex;
-  justify-content: center;
+	justify-content: center;
 }
 
-li {
+ul li {
 	list-style-type: none; /* Punkt weg */
 	margin: 0 24px;
 }
 
-li a {
+ul li a {
+	text-decoration: none;
 	border: 1px solid white;
 	border-radius: 50%;
 	color: white;
@@ -49,25 +53,19 @@ li a {
 	width: 80px;
 	height: 80px;
 	display: flex;
-  align-items: center;
-  justify-content: center;
+	align-items: center;
+	justify-content: center;
 	transition: all 0.5s;
 }
 
-li:nth-child(1) a:hover {
-	/* background-color: white;
-	color: black; */
+ul li:nth-child(1) a:hover {
 	box-shadow: -10px 10px 0px white;
 }
 
-li:nth-child(2) a:hover {
-	/* background-color: white;
-	color: black; */
+ul li:nth-child(2) a:hover {
 	box-shadow: 0 10px 0px white;
 }
 
-li:nth-child(3) a:hover {
-	/* background-color: white;
-	color: black; */
+ul li:nth-child(3) a:hover {
 	box-shadow: 10px 10px 0px white;
 }
