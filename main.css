@@ -21,6 +21,7 @@ html, body {
 /*Links in Icons weiss*/
 a[href] {
 	color: white;
+  outline: 0;
 }
 
 a {
