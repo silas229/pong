@@ -23,10 +23,10 @@ var sounds = {
 		if (sessionStorage.getItem("sound") === null) {
 			sessionStorage.setItem("sound", true);
 		}
-		this.active = sessionStorage.getItem("sound");
+		this.active = (sessionStorage.getItem("sound") === "true");
 		console.log("Sound: " + this.active);
 
-		if (!this.active) alert("Hi");
+		if (!this.active) this.icon.src="images/sound-off.svg";
 
 	},
 	/**
