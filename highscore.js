@@ -20,7 +20,7 @@ values.sort(function (a, b) {
 	if (a.gewonnen < b.gewonnen) {
 		return 1;
 	}
-	if (a.gewonnen = b.gewonnen) {
+	if (a.gewonnen == b.gewonnen) {
 		if ((a.tore - a.gegentore) > (b.tore - b.gegentore)) {
 			return -1;
 		}
