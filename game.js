@@ -349,7 +349,7 @@ var game = {
 		}
 
 		// unten
-		if(ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight + paddleHeight/2 - ball.size/2 + 2) {
+		if(ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2) {
 			paddleComputer.pos = ball.y - paddleHeight/2 + ball.size/2;
 		} else {
 			console.log("Paddle nicht bewegt");
