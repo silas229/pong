@@ -1,6 +1,10 @@
 "use strict";
 
 //https://webpack.js.org/guides/asset-management/
+//https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+//https://webpack.js.org/guides/csp/
+//https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+//https://www.webmasterpro.de/coding/ajax.html
 
 /**
  * In Sound wird geladen und ueberprueft, ob er zu Beginn an oder aus ist.
