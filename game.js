@@ -280,7 +280,8 @@ var game = {
 			if(paddleComputer.pos - ball.size < ball.y && ball.y < paddleComputer.pos + paddleHeight) {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
-				paddlePlayer.speed *= 1.2;
+				// paddlePlayer.speed *= 1.2;
+				paddleComputer.speed *= 1.2;
 				snd.paddle.play();
 				ball.vx =- ball.vx;
 			// Ball missed Computer paddle
@@ -467,6 +468,7 @@ var paddlePlayer = {
  */
 var paddleComputer = {
 	pos: (canvas.height-paddleHeight)/2,
+	speed: 7,
 	//Paddle zeichnen
 	draw: function () {
 		ctx.beginPath();
@@ -477,6 +479,7 @@ var paddleComputer = {
 	//Paddle auf Startposition setzen
 	reset: function () {
 		this.pos = (canvas.height-paddleHeight)/2;
+		this.speed = 7 * (rounds.state + 1);
 	}
 }
 
