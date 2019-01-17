@@ -1,10 +1,18 @@
 "use strict";
 
+
+/**
+ * In Sound wird geladen und ueberprueft, ob er zu Beginn an oder aus ist.
+ * Der Ton kann an und aus gestellt werden.
+ * Das Icon aendert sich entsprechend.
+ * @type {Object}
+ */
 var sounds = {
 	icon: document.querySelector("#sound img"),
 	// active: sessionStorage.getItem("sound"),
 	/**
-	 * Load sounds
+	 * Sounds werden intialisiert und geladen
+	 * @return {Audio} gibt die Audio zurueck
 	 */
 	load: function () {
 		this.start = new Audio("sounds/start.ogg");
@@ -16,8 +24,8 @@ var sounds = {
 		return this;
 	},
 	/**
-	 * Check active state
-	 * @return {boolean}
+	 * active - aktiven Status des Tones ueberpruefen
+	 * an = true; aus = false
 	 */
 	check: function () {
 		if (sessionStorage.getItem("sound") === null) {
@@ -30,7 +38,7 @@ var sounds = {
 
 	},
 	/**
-	 * Update sound button
+	 * Sound wird geupdatet. Er wird gemutet oder mute wird aufgehoben.
 	 */
 	update: function () {
 
@@ -84,7 +92,7 @@ document.getElementById("sound").addEventListener("click", function() {sounds.to
 var stopandgo = false;
 var pause = document.querySelector("#pause img");
 /**
- * Toggle between play and pause
+ * Toggle zwischen play und pause
  */
 function togglePause(){
 	if (rounds.state < rounds.round.length) {
@@ -115,14 +123,17 @@ ctx.textAlign = "center";
 ctx.fillStyle = "white";
 ctx.strokeStyle = "white";
 ctx.font = "50px Bit5x3";
-//ctx.font = 'bit5x3';
-//let f = new FontFace('bit5x3', 'bit5x3.tff');
 var raf;
 var paddleHeight = 80;
 var paddleWidth = 16;
 var topPressed = false;
 var bottomPressed = false;
 
+/**
+ * Der Ball wird gezeichnet, die Richtung kann zu Beginn eines Ballwechsels
+ * zufaellig bestimmt werden, der Ball kann in einem Bereich in der Mitte starten
+ * @type {Object}
+ */
 var ball = {
   size: 16,
 	x: canvas.width/2 - 8,
@@ -160,6 +171,10 @@ var ball = {
 	}
 }
 
+/**
+ * Mittellinie
+ * @type {Object}
+ */
 var line = {
   width: 16,
   draw: function() {
@@ -173,7 +188,12 @@ var line = {
   }
 }
 
+/**
+ * Spiellogik
+ * @type {Object}
+ */
 var game = {
+	//Ball startet in eine zufaellige Richtung und ctx wird neu gezeichnet (draw aufgerufen)
 	start: function () {
 		ball.vx = ball.startDir();
 		ball.vy = ball.startDir();
@@ -182,12 +202,12 @@ var game = {
 		console.log("Spiel gestartet");
 
 	},
+	//Canvas Inhalt wird geleert
 	clear: function() {
 		ctx.clearRect(0,0, canvas.width, canvas.height);
 	},
-	/**
-	 * Draw canvas
-	 */
+	//Feld wird geleert und alle Elemete neu gezeichnet
+	//Kontrolle, ob Ende des Levels erreicht
 	draw: function() {
 		game.clear();
 		// console.log("Canvas Reset");
@@ -219,14 +239,13 @@ var game = {
 		// console.log("Paddles bewegen");
 		game.move();
 	},
+	//Punktestand und Runden werden gezeichnet
 	display: function() {
 		computer.draw();
 		player.draw()
 		rounds.draw(rounds.state);
 	},
-	/**
-	 * Ball physics
-	 */
+	//Balllogik
 	ball: function () {
 		// Move ball
 		ball.x += ball.vx;
@@ -275,7 +294,9 @@ var game = {
 		}
 	},
 	/**
-	 * Ends a level
+	 * Punkte, Tore, Gegentore, Gewinn, Verlust werden aktualisiert
+	 * Gewinner wird zu Ende des Spiels ermittelt
+	 * Runden werden hochgezählt, falls Spiel noch nicht vorbei
 	 */
 	endLevel: function () {
 		this.clear();
@@ -323,7 +344,8 @@ var game = {
 		document.getElementById("pause").classList.add("restart");
 	},
 	/**
-	* Ends a game
+	* Spiel wird beendet
+	* Werte werden in localStorage gespeichert
 	*/
 	endGame: function() {
 		if (!localStorage.getItem('increment')) {
@@ -341,6 +363,7 @@ var game = {
 		localStorage.setItem('game'+localStorage.getItem('increment'), JSON.stringify(values));
 		localStorage.setItem('increment', parseInt(localStorage.getItem('increment')) + 1);
 	},
+	//Paddlebewegungen von Spieler und Computer
 	move: function () {
 		if(bottomPressed && paddlePlayer.pos < canvas.height - paddleHeight) {
 			paddlePlayer.pos += paddlePlayer.speed;
@@ -367,6 +390,10 @@ var game = {
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
+/**
+ * Aktion, wenn Taste gedrueckt
+ * @param  {event} e event
+ */
 function keyDownHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         topPressed = true;
@@ -378,6 +405,10 @@ function keyDownHandler(e) {
 		}
 }
 
+/**
+ * Aktion, wenn Taste losgelassen
+ * @param  {event} e event
+ */
 function keyUpHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         topPressed = false;
@@ -389,40 +420,51 @@ function keyUpHandler(e) {
     }
 }
 
+/**
+ * Paddle des Players auf der rechten Seite
+ * @type {Object}
+ */
 var paddlePlayer = {
 	pos: (canvas.height - paddleHeight)/2,
 	speed: 7,
-	/**
-	 * Draw Player paddle
-	 */
+	//Paddle zeichnen
 	draw: function () {
 		ctx.beginPath();
 		ctx.rect(canvas.width-paddleWidth, this.pos, paddleWidth, paddleHeight);
 		ctx.fill();
 		ctx.closePath();
 	},
+	//Paddle auf Startposition setzen und Geschwindigkeit an Runde anpassen
 	reset: function () {
 		this.pos = (canvas.height - paddleHeight)/2;
 		this.speed = 7 * (rounds.state + 1);
 	}
 }
 
+/**
+ * Paddle des Computers auf der linken Seite
+ * @type {Object}
+ */
 var paddleComputer = {
 	pos: (canvas.height-paddleHeight)/2,
-	/**
-	 * Draw Computer paddle
-	 */
+	//Paddle zeichnen
 	draw: function () {
 		ctx.beginPath();
     ctx.rect(0, this.pos, paddleWidth, paddleHeight);
     ctx.fill();
     ctx.closePath();
 	},
+	//Paddle auf Startposition setzen
 	reset: function () {
 		this.pos = (canvas.height-paddleHeight)/2;
 	}
 }
 
+/**
+ * Zeichnen des Punktestandes
+ * Eigenschaften: Punktestand, Name, gewonnene und verlorene Spiele, Tore und Gegentore
+ * @type {Object}
+ */
 var player = {
 	score: 0,
 	name: "Spieler",
@@ -430,9 +472,7 @@ var player = {
 	lose: 0,
 	goals: 0,
 	gegoals: 0,
-	/**
-	 * Display Player stats
-	 */
+	//Punktestand zeichnen
 	draw: function () {
     ctx.fillText(this.score.toString(), canvas.width/4*3, 48);
 		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4*3, 100);
@@ -440,15 +480,18 @@ var player = {
 	}
 }
 
+/**
+ * Zeichnen des Punktestandes
+ * Eigenschaften: Punktestand, gewonnene und verlorene Spiele, Tore und Gegentore
+ * @type {Object}
+ */
 var computer = {
 	score: 0,
 	won: 0,
 	lose: 0,
 	goals: 0,
 	gegoals: 0,
-	/**
-	 * Display Computer stats
-	 */
+	//Punktestand zeichnen
 	draw: function () {
     ctx.fillText(this.score.toString(), canvas.width/4, 48);
 		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4, 100);
@@ -456,12 +499,16 @@ var computer = {
 	}
 }
 
+/**
+ * Runde Nr. X wird in Canvas angezeigt
+ * @type {Object}
+ */
 var rounds = {
 	state: 0,
 	round: [1,2,3],
 	/**
-	 * Display the actual round
-	 * @param  {nr} nr
+	 * Bildet aktuelle Runde ab
+	 * @param  {int} nr state
 	 */
 	draw: function (nr) {
 		ctx.strokeStyle = "black";
@@ -473,7 +520,9 @@ var rounds = {
 }
 
 /**
- * Name form handling
+ * Aufgerufen durch die Bestaetigung der Namenseingabe
+ * Name wird ausgelesen und gespeichert und abgebildet
+ * Spiel startet
  * @param  {object} event
  */
 document.getElementById('nameInput').addEventListener('submit', function (event) {
@@ -491,7 +540,7 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 
 /**
  * Nachricht ausgeben
- * @param  {string} text [description]
+ * @param  {string} text Gewinner
  */
 function msg(text) {
 	document.getElementById("msg").innerHTML = text;
