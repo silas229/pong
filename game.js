@@ -1,5 +1,6 @@
 "use strict";
 
+//https://webpack.js.org/guides/asset-management/
 
 /**
  * In Sound wird geladen und ueberprueft, ob er zu Beginn an oder aus ist.
