@@ -378,7 +378,13 @@ var game = {
 		// 	console.log("Paddle nicht bewegt");
 		// }
 		// // console.log("Ball "+ball.y + " Paddle "+(paddleComputer.pos + paddleHeight/2 - ball.size/2));
+
+/**
+ * Computer automatically adjusts position based on ball position, with a calculated margin of error
+ * https://gist.github.com/ruffrey/1e242222aebbcd102a53
+ */
 		if (ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2 && ball.vx < 0) {
+			// difference between ball.y and paddle y
 			var diff = -((paddleComputer.pos + (paddleHeight/2)) - ball.y);
 			if(diff < 0 && diff < -4){
 				diff = -5;
