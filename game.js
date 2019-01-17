@@ -371,13 +371,27 @@ var game = {
 			paddlePlayer.pos -= paddlePlayer.speed;
 		}
 
-		// unten
-		if(ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2) {
-			paddleComputer.pos = ball.y - paddleHeight/2 + ball.size/2;
-		} else {
-			console.log("Paddle nicht bewegt");
+		// // unten
+		// if(ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2) {
+		// 	paddleComputer.pos = ball.y - paddleHeight/2 + ball.size/2;
+		// } else {
+		// 	console.log("Paddle nicht bewegt");
+		// }
+		// // console.log("Ball "+ball.y + " Paddle "+(paddleComputer.pos + paddleHeight/2 - ball.size/2));
+		if (ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2 && ball.vx < 0) {
+			var diff = -((paddleComputer.pos + (paddleHeight/2)) - ball.y);
+			if(diff < 0 && diff < -4){
+				diff = -5;
+			} else if (diff > 0 && diff > 4) {
+				diff = 5;
+			}
+			paddleComputer.pos += diff;
+			if (paddleComputer.pos < 0) {
+				paddleComputer.pos = 0;
+			} else if (paddleComputer.pos + paddleHeight > 480) {
+				paddleComputer.pos = 480 - paddleHeight;
+			}
 		}
-		// console.log("Ball "+ball.y + " Paddle "+(paddleComputer.pos + paddleHeight/2 - ball.size/2));
 	}
 }
 
