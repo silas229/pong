@@ -3,14 +3,11 @@
 var anzahl = parseInt(localStorage.getItem('increment'));
 
 var val, row, table = document.getElementsByTagName('tbody')[0];
-// var val, row, name, gewonnen, verloren, tore, gegentore, table = document.getElementsByTagName('table')[0];
 
 var values =  [];
 
 for (var i = 0; i < anzahl; i++) {
-	if (i < 5) {
-		values.push(JSON.parse(localStorage.getItem('game' + i)));
-	}
+	if (localStorage.getItem('game' + i) != null)	values.push(JSON.parse(localStorage.getItem('game' + i)));
 }
 
 values.sort(function (a, b) {
@@ -31,11 +28,13 @@ values.sort(function (a, b) {
 	}
 });
 
-for (var i = 0; i < values.length; i++) {
-	row = table.insertRow(i);
-	row.insertCell(0).innerHTML = values[i]['name'];
-	row.insertCell(1).innerHTML = values[i]['gewonnen'];
-	row.insertCell(2).innerHTML = values[i]['verloren'];
-	row.insertCell(3).innerHTML = values[i]['tore'];
-	row.insertCell(4).innerHTML = values[i]['gegentore'];
+for (var i = 0; i < 5; i++) {
+	if (values[i] != null) {
+		row = table.insertRow(i);
+		row.insertCell(0).innerHTML = values[i]['name'];
+		row.insertCell(1).innerHTML = values[i]['gewonnen'];
+		row.insertCell(2).innerHTML = values[i]['verloren'];
+		row.insertCell(3).innerHTML = values[i]['tore'];
+		row.insertCell(4).innerHTML = values[i]['gegentore'];
+	}
 }
