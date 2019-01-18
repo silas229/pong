@@ -154,7 +154,7 @@ var game = {
 	display: function() {
 		computer.draw();
 		player.draw()
-		game.rounds.draw(game.rounds.state);
+		this.rounds.draw(this.rounds.state);
 	},
 
 	/**
@@ -245,7 +245,7 @@ var game = {
 		player.paddle.draw();
 		computer.paddle.draw();
 
-		if (game.rounds.state == game.rounds.round.length - 1) {
+		if (this.rounds.state == this.rounds.round.length - 1) {
 			if (player.won > computer.won) {
 				console.log("Ende des Spiels. " + player.name + " hat gewonnen!");
 				msg("Ende des Spiels. " + player.name + " hat gewonnen!");
@@ -256,8 +256,8 @@ var game = {
 			this.endGame();
 		}
 
-		console.log(game.rounds.state);
-		game.rounds.state++;
+		console.log(this.rounds.state);
+		this.rounds.state++;
 		player.score = 0;
 		computer.score = 0;
 		console.log("Spielstand auf 0");
