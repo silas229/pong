@@ -1,0 +1,30 @@
+Variablen
+
+Objekte
+- game
+  - start
+  - clear
+  - draw
+  - move
+  - rounds
+  - display
+  - ball
+  - endLevel
+  - endGame
+- ball
+- player
+  - paddle
+- computer
+  - paddle
+    - predict
+- line
+- sounds
+
+Funktionen
+
+Event Listener
+ - Sound button
+ - Pause button
+ - Namenseingabe
+
+Starten der Sounds
