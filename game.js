@@ -114,7 +114,7 @@ function togglePause(){
 		}
 	} else {
 		pause.src = "images/restart.svg";
-		console.log("Neugestartet");
+		// console.log("Neugestartet");
 	}
 }
 
@@ -158,6 +158,8 @@ var ball = {
 	toggleDir: function() {
 		if (this.vx > 0) {
 			this.vx = -2 * (rounds.state + 1);
+			prediction.predict();
+			prediction.variant(15);
 		} else {
 			this.vx = 2 * (rounds.state + 1);
 		}
@@ -171,6 +173,8 @@ var ball = {
   	if ((Math.floor(Math.random() * (Math.floor(1) - Math.ceil(0) + 1)) + 0) == 1){
 			return 2;
 		} else {
+			prediction.variant(15);
+			prediction.predict();
 			return -2;
 		}
 	}
@@ -207,30 +211,28 @@ var game = {
 		console.log("Spiel gestartet");
 
 	},
-	//Canvas Inhalt wird geleert
+	/**
+	 * Canvas Inhalt wird geleert
+	 */
 	clear: function() {
 		ctx.clearRect(0,0, canvas.width, canvas.height);
 	},
-	//Feld wird geleert und alle Elemete neu gezeichnet
-	//Kontrolle, ob Ende des Levels erreicht
+	/**
+	 * Feld wird geleert und alle Elemete neu gezeichnet
+ 	 * Kontrolle, ob Ende des Levels erreicht
+	 */
 	draw: function() {
 		game.clear();
-		// console.log("Canvas Reset");
 
 		line.draw();
-		// console.log("Mittellinie gezeichnet");
 
 		ball.draw();
 		paddlePlayer.draw();
 		paddleComputer.draw();
-		// console.log("Ball und Paddles gezeichnet");
 
 		game.display();
-		// console.log("Computer, Player und Runden gezeichnet");
 
 		game.ball();
-		// console.log("Ball bewegt");
-		// console.log("Neuzeichnung");
 
 		if(player.score == 10 || computer.score == 10) {
 			console.log("Ende des Levels");
@@ -269,8 +271,11 @@ var game = {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
 				paddlePlayer.speed *= 1.2;
+				paddleComputer.speed *= 1.2;
 				snd.paddle.play();
 				ball.vx =- ball.vx;
+				prediction.predict();
+				prediction.variant(80);
 			// Ball missed Player paddle
 			} else {
 				snd.point.play();
@@ -285,7 +290,7 @@ var game = {
 			if(paddleComputer.pos - ball.size < ball.y && ball.y < paddleComputer.pos + paddleHeight) {
 				ball.vx *= 1.2;
 				ball.vy *= 1.2;
-				// paddlePlayer.speed *= 1.2;
+				paddlePlayer.speed *= 1.2;
 				paddleComputer.speed *= 1.2;
 				snd.paddle.play();
 				ball.vx =- ball.vx;
@@ -313,7 +318,7 @@ var game = {
 		computer.goals += computer.score;
 		computer.gegoals += player.score;
 
-		if(player.score == 10) {
+		if(player.score >= 10) {
 			console.log("%c" + player.name + " hat gewonnen", "color: green");
 			msg(player.name + " hat gewonnen!");
 			snd.win.play();
@@ -328,6 +333,9 @@ var game = {
 		}
 
 		this.display();
+
+		paddlePlayer.draw();
+		paddleComputer.draw();
 
 		if (rounds.state == rounds.round.length - 1) {
 			if (player.won > computer.won) {
@@ -389,23 +397,84 @@ var game = {
  * Computer automatically adjusts position based on ball position, with a calculated margin of error
  * https://gist.github.com/ruffrey/1e242222aebbcd102a53
  */
+ if (ball.x <= canvas.width/2 + Math.abs(ball.vx)/2 && ball.x >= canvas.width/2 - Math.abs(ball.vx)/2) {
+	 console.log("Mitte");
+	 prediction.variant(15);
+ }
 		if (ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2 && ball.vx < 0) {
 			// difference between ball.y and paddle y
-			var diff = -((paddleComputer.pos + (paddleHeight/2)) - ball.y);
-			if(diff < 0 && diff < -4){
-				diff = -5;
-			} else if (diff > 0 && diff > 4) {
-				diff = 5;
+			// var diff = -((paddleComputer.pos + (paddleHeight/2)) - ball.y);
+			// // console.log(diff);
+			// if(diff < 0 && diff < -4){
+			// 	diff = -5;
+			// } else if (diff > 0 && diff > 4) {
+			// 	diff = 5;
+			// }
+			// paddleComputer.pos += diff * rnd((rounds.state+1) * .4, 1.2);
+
+			if (paddleComputer.pos + paddleHeight/2 - ball.size/2 + paddleComputer.speed < prediction.variance || paddleComputer.pos + paddleHeight/2 - ball.size/2 > prediction.variance) {
+				if (paddleComputer.pos + paddleHeight/2 - ball.size/2 >= prediction.variance) {
+					paddleComputer.pos -= paddleComputer.speed;
+				} else {
+					paddleComputer.pos += paddleComputer.speed;
+				}
 			}
-			paddleComputer.pos += diff;
+
 			if (paddleComputer.pos < 0) {
 				paddleComputer.pos = 0;
-			} else if (paddleComputer.pos + paddleHeight > 480) {
-				paddleComputer.pos = 480 - paddleHeight;
+			} else if (paddleComputer.pos + paddleHeight > canvas.height) {
+				paddleComputer.pos = canvas.height - paddleHeight;
 			}
+
+			ctx.fillStyle = "yellow";
+			ctx.fillRect(paddleWidth,(prediction.variance-ball.size/2),ball.size,ball.size);
+			// console.log(prediction.abweichung);
+			ctx.fillStyle = "green";
+			ctx.fillRect(paddleWidth,(prediction.y-ball.size/2),ball.size,ball.size);
+			// console.log(prediction.y);
+			ctx.fillStyle = "white";
+			// console.log(prediction.y);
 		}
 	}
 }
+
+var prediction = {
+	/**
+	 * Predict ball position for computer
+	 */
+	predict: function () {
+		this.x = ball.x;
+		this.y = ball.y;
+		this.vx = ball.vx;
+		this.vy = ball.vy;
+		while (this.x >= paddleWidth) {
+			this.x += this.vx;
+			this.y += this.vy;
+			if (this.y + this.vy > canvas.height-ball.size || this.y + this.vy < 0) {
+				this.vy = -this.vy;
+			}
+		}
+	},
+	/**
+	 * Calculate variance
+	 * @param  {int|double} multi
+	 */
+	variant: function (multi) {
+		this.variance = this.y + this.rnd(-(rounds.state+1) * multi * Math.abs(ball.vx), (rounds.state+1) * multi * Math.abs(ball.vx));
+		console.log(this.variance);
+		console.log(this.y);
+	},
+	/**
+	* Returns random value
+	* @param  {int|double} min
+	* @param  {int|double} max
+	* @return {double}
+	*/
+	rnd: function (min, max) {
+		return (Math.random() * (max - min)) + min;
+	}
+};
+
 
 // window.addEventListener("gamepadconnected", function(e) {
 //   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes",
@@ -473,7 +542,7 @@ var paddlePlayer = {
  */
 var paddleComputer = {
 	pos: (canvas.height-paddleHeight)/2,
-	speed: 7,
+	speed: 4,
 	//Paddle zeichnen
 	draw: function () {
 		ctx.beginPath();
@@ -484,9 +553,11 @@ var paddleComputer = {
 	//Paddle auf Startposition setzen
 	reset: function () {
 		this.pos = (canvas.height-paddleHeight)/2;
-		this.speed = 7 * (rounds.state + 1);
+		this.speed = 4 * (rounds.state + 1);
 	}
 }
+
+var zufall = [1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 5, 5, 7];
 
 /**
  * Zeichnen des Punktestandes
@@ -517,7 +588,7 @@ var computer = {
 	score: 0,
 	won: 0,
 	lose: 0,
-	goals: 0,
+	goals: 9,
 	gegoals: 0,
 	//Punktestand zeichnen
 	draw: function () {
@@ -561,6 +632,7 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 	}
 	document.getElementById('name').innerHTML = player.name;
 	document.getElementsByClassName('modal')[0].style.display = 'none';
+	document.getElementById("spielername").blur();
 	document.getElementById('pause').style.display = 'inline-block';
 	game.start();
 	snd.start.pause();
