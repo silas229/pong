@@ -93,40 +93,40 @@ var game = {
 
 		// // unten
 		// if(ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2) {
-			// 	computer.paddle.pos = ball.y - paddleHeight/2 + ball.size/2;
-			// } else {
-				// 	console.log("Paddle nicht bewegt");
-				// }
-				// // console.log("Ball "+ball.y + " Paddle "+(computer.paddle.pos + paddleHeight/2 - ball.size/2));
+		// 	computer.paddle.pos = ball.y - paddleHeight/2 + ball.size/2;
+		// } else {
+  	// 	console.log("Paddle nicht bewegt");
+  	// }
+  	// // console.log("Ball "+ball.y + " Paddle "+(computer.paddle.pos + paddleHeight/2 - ball.size/2));
 
-				// In der Mitte neu berechnen
-				if (ball.x <= canvas.width/2 + Math.abs(ball.vx)/2 && ball.x >= canvas.width/2 - Math.abs(ball.vx)/2) {
-					console.log("Mitte");
-					computer.paddle.prediction.variant(15);
-				}
+  	// In der Mitte neu berechnen
+  	if (ball.x <= canvas.width/2 + Math.abs(ball.vx)/2 && ball.x >= canvas.width/2 - Math.abs(ball.vx)/2) {
+  		console.log("Mitte");
+  		computer.paddle.prediction.variant(10);
+  	}
 
-				if (ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2 && ball.vx < 0) {
-					if (computer.paddle.pos + paddleHeight/2 - ball.size/2 + computer.paddle.speed < computer.paddle.prediction.variance || computer.paddle.pos + paddleHeight/2 - ball.size/2 > computer.paddle.prediction.variance) {
-						if (computer.paddle.pos + paddleHeight/2 - ball.size/2 >= computer.paddle.prediction.variance) {
-							computer.paddle.pos -= computer.paddle.speed;
-						} else {
-							computer.paddle.pos += computer.paddle.speed;
-						}
-					}
+  	if (ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2 && ball.vx < 0) {
+  		if (computer.paddle.pos + paddleHeight/2 - ball.size/2 + computer.paddle.speed < computer.paddle.prediction.variance || computer.paddle.pos + paddleHeight/2 - ball.size/2 > computer.paddle.prediction.variance) {
+  			if (computer.paddle.pos + paddleHeight/2 - ball.size/2 >= computer.paddle.prediction.variance) {
+  				computer.paddle.pos -= computer.paddle.speed;
+  			} else {
+  				computer.paddle.pos += computer.paddle.speed;
+  			}
+  		}
 
-					if (computer.paddle.pos < 0) {
-						computer.paddle.pos = 0;
-					} else if (computer.paddle.pos + paddleHeight > canvas.height) {
-						computer.paddle.pos = canvas.height - paddleHeight;
-					}
+  		if (computer.paddle.pos < 0) {
+  			computer.paddle.pos = 0;
+  		} else if (computer.paddle.pos + paddleHeight > canvas.height) {
+  			computer.paddle.pos = canvas.height - paddleHeight;
+  		}
 
-					ctx.fillStyle = "yellow";
-					ctx.fillRect(paddleWidth,(computer.paddle.prediction.variance-ball.size/2),ball.size,ball.size);
-					ctx.fillStyle = "green";
-					ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
-					ctx.fillStyle = "white";
-				}
-			},
+  		ctx.fillStyle = "yellow";
+  		ctx.fillRect(paddleWidth,(computer.paddle.prediction.variance-ball.size/2),ball.size,ball.size);
+  		ctx.fillStyle = "green";
+  		ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
+  		ctx.fillStyle = "white";
+  	}
+  },
 
 	/**
 	* Runde Nr. X wird in Canvas angezeigt
@@ -313,7 +313,7 @@ var ball = {
 		if (this.vx > 0) {
 			this.vx = -2 * (game.rounds.state + 1);
 			computer.paddle.prediction.predict();
-			computer.paddle.prediction.variant(15);
+			computer.paddle.prediction.variant(10);
 		} else {
 			this.vx = 2 * (game.rounds.state + 1);
 		}
@@ -327,7 +327,7 @@ var ball = {
   	if ((Math.floor(Math.random() * (Math.floor(1) - Math.ceil(0) + 1)) + 0) == 1){
 			return 2;
 		} else {
-			computer.paddle.prediction.variant(15);
+			computer.paddle.prediction.variant(10);
 			computer.paddle.prediction.predict();
 			return -2;
 		}
@@ -444,9 +444,9 @@ var computer = {
 			 * @param  {int|double} multi
 			 */
 			variant: function (multi) {
-				this.variance = this.y + this.rnd(-(game.rounds.state+1) * multi * Math.abs(ball.vx), (game.rounds.state+1) * multi * Math.abs(ball.vx));
-				console.log(this.variance);
-				console.log(this.y);
+				this.variance = this.y + this.rnd(-((game.rounds.state+1) * multi * Math.abs(ball.vx)), (game.rounds.state+1) * multi * Math.abs(ball.vx));
+        // this.variance = this.y + this.rnd(-((multi * Math.abs(ball.vx)) / game.rounds.state+1), multi * Math.abs(ball.vx) / game.rounds.state+1);
+        console.log(Math.abs(this.variance-this.y));
 			},
 			/**
 			* Returns random value
