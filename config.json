@@ -4,6 +4,14 @@
 { "name": "DE", "id": "de", "isDefault": "true", "acrossLanguage": "de-DE" }
 ],
 
-"sourceLanguage": "de-DE"
+"sourceLanguage": "de-DE",
 
+     "ctx": {
+          "textAlign" : "center",
+          "fillStyle" : "white",
+          "strokeStyle" : "white",
+          "font" : "50px Bit5x3"
+     },
+     "topPressed" : false,
+     "bottomPressed" : false
 }

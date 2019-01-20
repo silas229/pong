@@ -10,17 +10,34 @@
 // Variables //
 ///////////////
 
+var config;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-ctx.textAlign = "center";
-ctx.fillStyle = "white";
-ctx.strokeStyle = "white";
-ctx.font = "50px Bit5x3";
 var raf;
 var paddleHeight = 80;
 var paddleWidth = 16;
-var topPressed = false;
-var bottomPressed = false;
+var topPressed;
+var bottomPressed;
+
+
+fetch('../config.json')
+     .then(function (response) {
+          return response.json();
+     })
+     .then(function (myJson) {
+          config = myJson;
+          init();
+     });
+
+function init(){
+     ctx.textAlign = config.ctx.textAlign;
+     ctx.fillStyle = config.ctx.fillStyle;
+     ctx.strokeStyle = config.ctx.strokeStyle;
+     ctx.font = config.ctx.font;
+     topPressed = config.topPressed;
+     bottomPressed = config.bottomPressed;
+}
+
 
 /////////////
 // Objects //
@@ -181,10 +198,10 @@ var game = {
 		if (ball.x + ball.vx > canvas.width-paddleWidth-ball.size) {
 			// Ball hits Player paddle
 			if(player.paddle.pos - ball.size < ball.y && ball.y < player.paddle.pos + paddleHeight) {
-				ball.vx *= 1.2;
-				ball.vy *= 1.2;
-				player.paddle.speed *= 1.2;
-				computer.paddle.speed *= 1.2;
+				ball.vx *= 1.1;
+				ball.vy *= 1.1;
+				player.paddle.speed *= 1.1;
+				computer.paddle.speed *= 1.1;
 				snd.paddle.play();
 				ball.vx =- ball.vx;
 				computer.paddle.prediction.predict();
@@ -201,10 +218,10 @@ var game = {
 		} else if (ball.x + ball.vx < paddleWidth) {
 			// Ball hits Computer paddle
 			if(computer.paddle.pos - ball.size < ball.y && ball.y < computer.paddle.pos + paddleHeight) {
-				ball.vx *= 1.2;
-				ball.vy *= 1.2;
-				player.paddle.speed *= 1.2;
-				computer.paddle.speed *= 1.2;
+				ball.vx *= 1.1;
+				ball.vy *= 1.1;
+				player.paddle.speed *= 1.1;
+				computer.paddle.speed *= 1.1;
 				snd.paddle.play();
 				ball.vx =- ball.vx;
 				// Ball missed Computer paddle
