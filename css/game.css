@@ -123,3 +123,8 @@ canvas {
 #pause:not(.restart) {
 	transition: all 0;
 }
+
+#msgPoints{
+	font-size: 50px;
+	margin: auto;
+}

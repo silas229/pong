@@ -215,7 +215,7 @@ var game = {
 	/**
 	* Punkte, Tore, Gegentore, Gewinn, Verlust werden aktualisiert
 	* Gewinner wird zu Ende des Spiels ermittelt
-	* Runden werden hochgezählt, falls Spiel noch nicht vorbei
+	* Runden werden hochgezaehlt, falls Spiel noch nicht vorbei
 	*/
 	endLevel: function () {
 		this.clear();
@@ -340,7 +340,7 @@ var ball = {
  * @type {Object}
  */
 var player = {
-	score: 0,
+	score: 9,
 	name: "Spieler",
 	won: 0,
 	lose: 0,
@@ -492,12 +492,12 @@ var sounds = {
 	 * @return {Audio} gibt die Audio zurueck
 	 */
 	load: function () {
-		this.start = new Audio("sounds/start.ogg");
-		this.point = new Audio("sounds/point.ogg");
-		this.side = new Audio("sounds/side.ogg");
-		this.paddle = new Audio("sounds/paddle.ogg");
-		this.win = new Audio("sounds/win.ogg");
-		this.lose = new Audio("sounds/lose.ogg");
+		this.start = new Audio("../sounds/start.ogg");
+		this.point = new Audio("../sounds/point.ogg");
+		this.side = new Audio("../sounds/side.ogg");
+		this.paddle = new Audio("../sounds/paddle.ogg");
+		this.win = new Audio("../sounds/win.ogg");
+		this.lose = new Audio("../sounds/lose.ogg");
 		return this;
 	},
 	/**
@@ -511,7 +511,7 @@ var sounds = {
 		this.active = (sessionStorage.getItem("sound") === "true");
 		console.log("Sound: " + this.active);
 
-		if (!this.active) this.icon.src="images/sound-off.svg";
+		if (!this.active) this.icon.src="../images/sound-off.svg";
 
 	},
 	/**
@@ -533,12 +533,12 @@ var sounds = {
 		if (this.active) {
 			sessionStorage.setItem("sound", false);
 			this.active = false;
-			this.icon.src = "images/sound-off.svg";
+			this.icon.src = "../images/sound-off.svg";
 			console.log("Ton aus");
 		} else {
 			sessionStorage.setItem("sound", true);
 			this.active = true;
-			this.icon.src = "images/sound-on.svg";
+			this.icon.src = "../images/sound-on.svg";
 			console.log("Ton an");
 		}
 		this.update();
@@ -555,17 +555,17 @@ var pause = {
     if (game.rounds.state < game.rounds.round.length) {
   		if(this.state){
   			this.state = false;
-  			this.icon.src = "images/pause.svg";
+  			this.icon.src = "../images/pause.svg";
   			console.log("%cFortgefahren", "color: green");
   			raf = window.requestAnimationFrame(game.draw);
   		} else {
   			this.state = true;
-  			this.icon.src = "images/play.svg";
+  			this.icon.src = "../images/play.svg";
   			console.log("%cPausiert", "color: red");
   			window.cancelAnimationFrame(raf);
   		}
   	} else {
-  		this.icon.src = "images/restart.svg";
+  		this.icon.src = "../images/restart.svg";
   	}
   }
 }
@@ -581,6 +581,14 @@ var pause = {
  */
 function msg(text) {
 	document.getElementById("msg").innerHTML = text;
+}
+
+/**
+ * Nachricht ausgeben
+ * @param  {string} text Gewinner
+ */
+function msgP(text) {
+	document.getElementById("msgPoints").innerHTML = text;
 }
 
 /**
@@ -633,7 +641,8 @@ document.getElementById("pause").addEventListener("click", function (event) {
   event.preventDefault;
   if (game.rounds.state < game.rounds.round.length) {
     this.classList.remove("restart");
-    msg("&nbsp;");
+    msgP("&nbsp;");
+		msg("&nbsp;");
     pause.toggle();
   } else {
     location.reload();
@@ -657,6 +666,7 @@ document.getElementById('nameInput').addEventListener('submit', function (event)
 	document.getElementById("spielername").blur();
 	document.getElementById('pause').style.display = 'inline-block';
 	game.start();
+	msgP(computer.won + " : " + player.won);
 	snd.start.pause();
 }, false);
 
