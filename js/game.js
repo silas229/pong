@@ -147,12 +147,6 @@ var game = {
 			 * ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
 			 * ctx.fillStyle = config.ctx.fillStyle;
 			 */
-
-       ctx.fillStyle = "yellow";
-       ctx.fillRect(paddleWidth,(computer.paddle.prediction.variance-ball.size/2),ball.size,ball.size);
-       ctx.fillStyle = "green";
-       ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
-       ctx.fillStyle = config.ctx.fillStyle;
   	}
   },
 
