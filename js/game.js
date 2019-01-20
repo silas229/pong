@@ -147,6 +147,12 @@ var game = {
 			 * ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
 			 * ctx.fillStyle = config.ctx.fillStyle;
 			 */
+
+       ctx.fillStyle = "yellow";
+       ctx.fillRect(paddleWidth,(computer.paddle.prediction.variance-ball.size/2),ball.size,ball.size);
+       ctx.fillStyle = "green";
+       ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
+       ctx.fillStyle = config.ctx.fillStyle;
   	}
   },
 
@@ -276,7 +282,7 @@ var game = {
 			this.endGame();
 		}
 
-		console.log(this.rounds.state);
+		console.log("Runde - 1" + this.rounds.state);
 		this.rounds.state++;
 		player.score = 0;
 		computer.score = 0;
@@ -332,14 +338,14 @@ var ball = {
 	},
 	 toggleDir: function() {
 		if (this.vx > 0) {
-			this.vx = -2 * (game.rounds.state + 1);
+			this.vx = -2;
 		} else {
-			this.vx = 2 * (game.rounds.state + 1);
+			this.vx = 2;
 		}
 		if (this.vy > 0) {
-			this.vy = 2 * (game.rounds.state + 1);
+			this.vy = 2;
 		} else {
-			this.vy = -2 * (game.rounds.state + 1);
+			this.vy = -2;
 		}
 		computer.paddle.prediction.predict();
 		computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
