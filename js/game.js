@@ -38,6 +38,9 @@ var game = {
 		ball.vx = ball.startDir();
 		ball.vy = ball.startDir();
 
+		computer.paddle.prediction.predict();
+		computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
+
 		document.addEventListener("keydown", keyDownHandler, false);
 		document.addEventListener("keyup", keyUpHandler, false);
 
@@ -104,7 +107,6 @@ var game = {
   	if (ball.x <= canvas.width/2 + Math.abs(ball.vx)/2 && ball.x >= canvas.width/2 - Math.abs(ball.vx)/2) {
   		console.log("Mitte");
   		computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
-			// computer.paddle.prediction.variant(10);
   	}
 
   	if (ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2 && ball.vx < 0) {
@@ -187,7 +189,6 @@ var game = {
 				ball.vx =- ball.vx;
 				computer.paddle.prediction.predict();
 				computer.paddle.prediction.variant(game.rounds.diffP[game.rounds.state]);
-				// computer.paddle.prediction.variant(80);
 				// Ball missed Player paddle
 			} else {
 				snd.point.play();
@@ -318,9 +319,6 @@ var ball = {
 	toggleDir: function() {
 		if (this.vx > 0) {
 			this.vx = -2 * (game.rounds.state + 1);
-			computer.paddle.prediction.predict();
-			computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
-			// computer.paddle.prediction.variant(10);
 		} else {
 			this.vx = 2 * (game.rounds.state + 1);
 		}
@@ -329,14 +327,13 @@ var ball = {
 		} else {
 			this.vy = -2 * (game.rounds.state + 1);
 		}
+		computer.paddle.prediction.predict();
+		computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
 	},
 	startDir: function() {
   	if ((Math.floor(Math.random() * (Math.floor(1) - Math.ceil(0) + 1)) + 0) == 1){
 			return 2;
 		} else {
-			computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
-			// computer.paddle.prediction.variant(10);
-			computer.paddle.prediction.predict();
 			return -2;
 		}
 	}
