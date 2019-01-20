@@ -13,5 +13,12 @@
           "font" : "50px Bit5x3"
      },
      "topPressed" : false,
-     "bottomPressed" : false
+     "bottomPressed" : false,
+
+     "rounds": {
+            "state": 0,
+            "round": [1, 2, 3],
+            "diffP": [80, 70, 50],
+            "diffM": [12, 9, 5]
+     }
 }

@@ -1,5 +1,7 @@
 "use strict";
 
+(function(){
+
 //https://webpack.js.org/guides/asset-management/
 //https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 //https://webpack.js.org/guides/csp/
@@ -36,6 +38,10 @@ function init(){
      ctx.font = config.ctx.font;
      topPressed = config.topPressed;
      bottomPressed = config.bottomPressed;
+     game.rounds.state = config.rounds.state;
+     game.rounds.round = config.rounds.round;
+     game.rounds.diffP = config.rounds.diffP;
+     game.rounds.diffM = config.rounds.diffM;
 }
 
 
@@ -145,7 +151,7 @@ var game = {
   		ctx.fillRect(paddleWidth,(computer.paddle.prediction.variance-ball.size/2),ball.size,ball.size);
   		ctx.fillStyle = "green";
   		ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
-  		ctx.fillStyle = "white";
+  		ctx.fillStyle = config.ctx.fillStyle;
   	}
   },
 
@@ -154,10 +160,6 @@ var game = {
 	* @type {Object}
 	*/
 	rounds: {
-		state: 0,
-		round: [1,2,3],
-		diffP: [80,70,50],
-		diffM: [12,9,5],
 		/**
 		* Bildet aktuelle Runde ab
 		* @param  {int} nr state
@@ -333,7 +335,7 @@ var ball = {
 		this.toggleDir();
 		console.log("Ball in der Mitte");
 	},
-	toggleDir: function() {
+	 : function() {
 		if (this.vx > 0) {
 			this.vx = -2 * (game.rounds.state + 1);
 		} else {
@@ -699,3 +701,5 @@ sounds.check();
 sounds.update();
 
 snd.start.play();
+
+})();
