@@ -47,7 +47,6 @@
 	outline: none;
 	color: white;
 	font-size: 2rem;
-	/* height: 24px; */
 	font-family: 'bit5x3';
 }
 
@@ -84,14 +83,6 @@ table td {
 	text-align: center;
 }
 
-/* table td:nth-child(1) {
-	text-align: right;
-}
-
-table td:nth-child(2) {
-	text-align: left;
-} */
-
 /*Senden und DropDown*/
 .punkte{
 	margin-left: 24px;
@@ -101,11 +92,6 @@ canvas {
 	border-bottom: 16px solid white;
 	border-top: 16px solid white;
 }
-
-/* #pause,
-#pause img {
-	transition: all 2s ease;
-} */
 
 .restart img {
 	width: 100%;
@@ -127,4 +113,8 @@ canvas {
 #msgPoints{
 	font-size: 50px;
 	margin: auto;
+}
+
+#noJS{
+	font-size: 24px;
 }

@@ -11,7 +11,7 @@
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="description" content="Spiele den Retroklassiker Pong auf deinem Computer&quot;">
-		<meta audience="Fans der originalen Version">
+		<meta name="audience" content="Fans der originalen Version">
 		<meta name="keywords" content="pong,spiel,game,html,html5,canvas,js,javascript">
 		<meta name="robots" content="index, follow">
 		<meta name="author" content="Louisa Laudi">
@@ -37,7 +37,6 @@
 		<meta name="msapplication-starturl" content="/">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="stylesheet" href="../css/main.css">
 		<link rel="stylesheet" href="../css/game.css">
 	</head>
@@ -52,15 +51,11 @@
 		</header>
 
 		<div class="modal">
+			<noscript id = "noJS">
+				<p>Gratuliere! Sie sind im 19. Jahrhundert angekommen.</p>
+				<p>Bitte suchen Sie sich einen Browser der nach dem Jahr 2000 erschienen ist oder <a href="https://www.enable-javascript.com/de/" target="_blank">aktivieren sie JavaScript</a>.</p>
+			</noscript>
 			<div class="playerinfo">
-				<noscript>
-					<style media="screen">
-						#nameInput,h2{display: none}
-						p{font-size: 24px}
-					</style>
-					<p>Gratuliere! Sie sind im 19. Jahrhundert angekommen.</p>
-					<p>Bitte suchen Sie sich einen Browser der nach dem Jahr 2000 erschienen ist oder <a href="https://www.enable-javascript.com/de/" target="_blank">aktivieren sie JavaScript</a>.</p>
-				</noscript>
 				<h2>Bitte gib deinen Namen ein!</h2>
 				<form id="nameInput">
 					<input type="text" name="spielername" id="spielername" maxlength="30" placeholder="Spielername" autocomplete="given-name" autofocus pattern="[A-Za-z0-9]+" title="Bitte nur alphanumerische Namen eingeben" />
