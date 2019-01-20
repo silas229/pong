@@ -2,12 +2,6 @@
 
 (function(){
 
-//https://webpack.js.org/guides/asset-management/
-//https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-//https://webpack.js.org/guides/csp/
-//https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-//https://www.webmasterpro.de/coding/ajax.html
-
 ///////////////
 // Variables //
 ///////////////
@@ -21,7 +15,9 @@ var paddleWidth = 16;
 var topPressed;
 var bottomPressed;
 
-
+/**
+ * JSON einbinden
+ */
 fetch('../config.json')
      .then(function (response) {
           return response.json();
@@ -31,6 +27,9 @@ fetch('../config.json')
           init();
      });
 
+/**
+ * Deklarieren der Variablen - bekommen Werte aus config
+ */
 function init(){
      ctx.textAlign = config.ctx.textAlign;
      ctx.fillStyle = config.ctx.fillStyle;
@@ -138,7 +137,7 @@ var game = {
   		}
 
 			/**
-			 * optional sichtbar machen
+			 * -- optional sichtbar machen --
 			 * berechneter Auftreffpunkt des Balls in gruen
 			 * Paddle bewegt sich zu gelbem Punkt, der mit Abweichung vom gruenen Punkt versehen ist
 			 *

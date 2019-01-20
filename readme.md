@@ -12,7 +12,7 @@ Das Spiel Pong, welches hier programmiert wurde, erfordert eine Gruppengröße v
 Link zum Spiel
 
 ### Was ist Pong?
-<p> Pong wurde nach seiner Veröffentlichung 1972 zum ersten weltweit beliebten Videospiel. Es gilt als Urvater der Videospiele. Das Retrospiel ähnelt sehr dem Prinzip des Tischtennis. Dies lässt schon das Spielfeld erkennen. In der Mitte befindet sich eine horizontale, gestrichelte Linie, die als Netz anzusehen ist. Auf ihr startet mittig der Ball bei Spielbeginn oder wenn ein Punkt erzielt wurde. Von dort aus fliegt er nach links oder rechts. Nun befindet sich auf jeder Seite ein Spieler, der seinen Schläger in Form eines Balkens steuern kann. In der Originalversion geschieht dies mit einem Rotationscontroller - in dieser Version mit den Pfeil nach oben und unten Tasten. Der Ball wird nach jedem Berühren durch ein Paddle bzw. Balken schneller. Kann der Ball nicht abgefangen werden und fliegt am Balken vorbei, bekommt der Gegner einen Punkt. Der Punktestand wird im Feld angezeigt.
+<p> Pong wurde nach seiner Veröffentlichung 1972 zum ersten weltweit beliebten Videospiel. Es gilt als Urvater der Videospiele. Das Retrospiel ähnelt sehr dem Prinzip des Tischtennis. Dies lässt schon das Spielfeld erkennen. In der Mitte befindet sich eine vertikale, gestrichelte Linie, die als Netz anzusehen ist. Auf ihr startet der Ball bei Spielbeginn oder wenn ein Punkt erzielt wurde. Von dort aus fliegt er nach links oder rechts. Nun befindet sich auf jeder Seite ein Spieler, der seinen Schläger in Form eines Balkens steuern kann. In der Originalversion geschieht dies mit einem Rotationscontroller - in dieser Version mit den Pfeil nach oben und unten Tasten. Der Ball wird nach jedem Berühren durch ein Paddle bzw. Balken schneller. Kann der Ball nicht abgefangen werden und fliegt am Balken vorbei, bekommt der Gegner einen Punkt. Der Punktestand wird im Feld angezeigt. Der Stand in Bezug auf die Runden ist unterhalb des Spielfeldes zu sehen.
 </p>
 
 ### Regeln
@@ -21,7 +21,7 @@ Link zum Spiel
 Beginn des Spiels ist sofort nach der Auswahl des Spielernamens. Die folgenden Runden werden erst gestartet, wenn auf das Play-Symbol nach Abschluss einer Runde geklickt wird. </br>
 Im Laufe des Spiels kann der rechte Balken mit den Pfeiltasten auf und ab bewegt werden. Ziel ist es, den Ball im Spiel zu halten, was bedeutet, ihn immer mit dem eigenen Balken abzufangen. Wird der Ball abgefangen, prallt er ab und fliegt wieder in die andere Richtung. Schafft der Gegner es nicht, den Ball mit dem Balken zurückzuspielen, bekommt der Spieler einen Punkt. Anschließend wird der Ball von der Mitte aus wieder neu gespielt. Dieser Ablauf wiederholt sich so lange, bis ein Spieler 10 Punkte erreicht hat. </br>
 </br>
-Soll das Spiel zwiscendurch gestoppt und/ oder wieder gestartet werden, kann der Button mit dem Play oder Pause Symbol in der oberen rechten Ecke angeklickt werden. Soll der Sound ausgeschaltet oder wieder eingeschaltet werden, kann das Lautsprecher-Symbol in der oberen rechten Ecke angeklickt werden. Um wieder auf die Startseite zu gelangen, befindet sich in der oberen linken Ecke ein Home-Button.
+Soll das Spiel zwiscendurch gestoppt und/ oder wieder gestartet werden, kann der Button mit dem Play oder Pause Symbol in der oberen rechten Ecke angeklickt werden. Ebenso funktioniert dies mit der Leertaste. Soll der Sound ausgeschaltet oder wieder eingeschaltet werden, kann das Lautsprecher-Symbol in der oberen rechten Ecke angeklickt werden. Um wieder auf die Startseite zu gelangen, befindet sich in der oberen linken Ecke ein Home-Button.
 </p>
 
 ### Steuerung
@@ -31,3 +31,4 @@ Soll das Spiel zwiscendurch gestoppt und/ oder wieder gestartet werden, kann der
 | Pfeiltaste unten drücken | *Paddle auf der rechten Seite bewegt sich nach unten.* |
 | Anklicken des Pause- bzw. Play-Buttons | *Das Spiel startet oder stoppt.* |
 | Anklicken des Lautsprecher-Symbols | *Der Ton schaltet sich an oder aus.* |
+| Leertaste drücken | *Das Spiel startet oder stoppt.* |
