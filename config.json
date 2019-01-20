@@ -1,0 +1,9 @@
+{
+
+"supportedLocales": [
+{ "name": "DE", "id": "de", "isDefault": "true", "acrossLanguage": "de-DE" }
+],
+
+"sourceLanguage": "de-DE"
+
+}
