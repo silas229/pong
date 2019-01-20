@@ -70,3 +70,7 @@ ul li:nth-child(2) a:hover {
 ul li:nth-child(3) a:hover {
 	box-shadow: 10px 10px 0px white;
 }
+
+footer{
+	margin-top: 20vh;
+}
