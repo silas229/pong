@@ -71,6 +71,7 @@ var game = {
 		if(player.score == 10 || computer.score == 10) {
 			console.log("Ende des Levels");
 			game.endLevel();
+			msgP(computer.won + " : " + player.won);
 			console.log("Level beendet");
 		} else {
 			// console.log("Spiel geht weiter");
@@ -186,7 +187,7 @@ var game = {
 				ball.vx =- ball.vx;
 				computer.paddle.prediction.predict();
 				// computer.paddle.prediction.variant(rounds.diffP[rounds.state]);
-				computer.paddle.prediction.variant(80);
+				computer.paddle.prediction.variant(80)// ;
 				// Ball missed Player paddle
 			} else {
 				snd.point.play();
@@ -357,8 +358,8 @@ var player = {
 	 */
 	draw: function () {
     ctx.fillText(this.score.toString(), canvas.width/4*3, 48);
-		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4*3, 100);
-		ctx.fillText(this.goals.toString()+" : "+this.gegoals.toString(), canvas.width/4*3, 150);
+		// ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4*3, 100);
+		// ctx.fillText(this.goals.toString()+" : "+this.gegoals.toString(), canvas.width/4*3, 150);
 	},
 	/**
 	 * Paddle des Players auf der rechten Seite
@@ -402,8 +403,8 @@ var computer = {
 	 */
 	draw: function () {
     ctx.fillText(this.score.toString(), canvas.width/4, 48);
-		ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4, 100);
-		ctx.fillText(this.goals.toString()+" : "+this.gegoals.toString(), canvas.width/4, 150);
+		// ctx.fillText(this.won.toString()+" : "+this.lose.toString(), canvas.width/4, 100);
+		// ctx.fillText(this.goals.toString()+" : "+this.gegoals.toString(), canvas.width/4, 150);
 	},
 	/**
 	 * Paddle des Computers auf der linken Seite
@@ -647,7 +648,6 @@ document.getElementById("pause").addEventListener("click", function (event) {
   event.preventDefault;
   if (game.rounds.state < game.rounds.round.length) {
     this.classList.remove("restart");
-    msgP("&nbsp;");
 		msg("&nbsp;");
     pause.toggle();
   } else {
