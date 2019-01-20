@@ -301,7 +301,8 @@ var game = {
 var ball = {
   size: 16,
 	x: canvas.width/2 - 8,
-	y: canvas.height/2 -8,
+	y: canvas.height/2 - 8,
+	// x: canvas.width - paddleWidth,
   draw: function() {
     ctx.beginPath();
     ctx.rect(this.x,this.y,this.size,this.size);
@@ -438,7 +439,7 @@ var computer = {
 				this.y = ball.y;
 				this.vx = ball.vx;
 				this.vy = ball.vy;
-				while (this.x >= paddleWidth) {
+				while (this.x >= paddleWidth && this.x < canvas.width - paddleWidth - ball.size) {
 					this.x += this.vx;
 					this.y += this.vy;
 					if (this.y + this.vy > canvas.height-ball.size || this.y + this.vy < 0) {
