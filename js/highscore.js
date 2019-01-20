@@ -1,5 +1,7 @@
 "use strict";
 
+(function(){
+
 var anzahl = parseInt(localStorage.getItem('increment'));
 
 var val, row, table = document.getElementsByTagName('tbody')[0];
@@ -38,3 +40,5 @@ for (var i = 0; i < 5; i++) {
 		row.insertCell(4).innerHTML = values[i]['gegentore'];
 	}
 }
+
+})();
