@@ -439,7 +439,7 @@ var computer = {
 				this.y = ball.y;
 				this.vx = ball.vx;
 				this.vy = ball.vy;
-				while (this.x >= paddleWidth && this.x < canvas.width - paddleWidth - ball.size) {
+				while (this.x + this.vx >= paddleWidth && ball.vx < 0) {
 					this.x += this.vx;
 					this.y += this.vy;
 					if (this.y + this.vy > canvas.height-ball.size || this.y + this.vy < 0) {
