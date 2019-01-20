@@ -100,11 +100,9 @@ var game = {
 			msgP(computer.won + " : " + player.won);
 			console.log("Level beendet");
 		} else {
-			// console.log("Spiel geht weiter");
 			raf = window.requestAnimationFrame(game.draw);
 		}
 
-		// console.log("Paddles bewegen");
 		game.move();
 	},
 
@@ -118,17 +116,9 @@ var game = {
 			player.paddle.pos -= player.paddle.speed;
 		}
 
-		// // unten
-		// if(ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2) {
-		// 	computer.paddle.pos = ball.y - paddleHeight/2 + ball.size/2;
-		// } else {
-  	// 	console.log("Paddle nicht bewegt");
-  	// }
-  	// // console.log("Ball "+ball.y + " Paddle "+(computer.paddle.pos + paddleHeight/2 - ball.size/2));
-
   	// In der Mitte neu berechnen
   	if (ball.x <= canvas.width/2 + Math.abs(ball.vx)/2 && ball.x >= canvas.width/2 - Math.abs(ball.vx)/2) {
-  		console.log("Mitte");
+  		console.log("Ball in der Mitte");
   		computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
   	}
 
@@ -147,11 +137,17 @@ var game = {
   			computer.paddle.pos = canvas.height - paddleHeight;
   		}
 
-  		ctx.fillStyle = "yellow";
-  		ctx.fillRect(paddleWidth,(computer.paddle.prediction.variance-ball.size/2),ball.size,ball.size);
-  		ctx.fillStyle = "green";
-  		ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
-  		ctx.fillStyle = config.ctx.fillStyle;
+			/**
+			 * optional sichtbar machen
+			 * berechneter Auftreffpunkt des Balls in gruen
+			 * Paddle bewegt sich zu gelbem Punkt, der mit Abweichung vom gruenen Punkt versehen ist
+			 *
+			 * ctx.fillStyle = "yellow";
+			 * ctx.fillRect(paddleWidth,(computer.paddle.prediction.variance-ball.size/2),ball.size,ball.size);
+			 * ctx.fillStyle = "green";
+			 * ctx.fillRect(paddleWidth,(computer.paddle.prediction.y-ball.size/2),ball.size,ball.size);
+			 * ctx.fillStyle = config.ctx.fillStyle;
+			 */
   	}
   },
 
@@ -448,7 +444,7 @@ var computer = {
 		},
 		prediction: {
 			/**
-			 * Predict ball position for computer
+			 * Vorhersage der Ballposition am linken Rand
 			 */
 			predict: function () {
 				this.x = ball.x;
@@ -464,16 +460,14 @@ var computer = {
 				}
 			},
 			/**
-			 * Calculate variance
+			 * Varianz kalkulieren
 			 * @param  {int|double} multi
 			 */
 			variant: function (multi) {
 				this.variance = this.y + this.rnd(-((game.rounds.state+1) * multi * Math.abs(ball.vx)), (game.rounds.state+1) * multi * Math.abs(ball.vx));
-        // this.variance = this.y + this.rnd(-((multi * Math.abs(ball.vx)) / game.rounds.state+1), multi * Math.abs(ball.vx) / game.rounds.state+1);
-        console.log(Math.abs(this.variance-this.y));
 			},
 			/**
-			* Returns random value
+			* Zufaellige Werte
 			* @param  {int|double} min
 			* @param  {int|double} max
 			* @return {double}
@@ -510,7 +504,6 @@ var line = {
  */
 var sounds = {
 	icon: document.querySelector("#sound img"),
-	// active: sessionStorage.getItem("sound"),
 	/**
 	 * Sounds werden intialisiert und geladen
 	 * @return {Audio} gibt die Audio zurueck
@@ -637,11 +630,11 @@ function keyDownHandler(e) {
 function keyUpHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         topPressed = false;
-				console.log("Pfeiltaste Oben losgelassen");
+				console.log("%cPfeiltaste Oben losgelassen","color: lightgrey");
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         bottomPressed = false;
-				console.log("Pfeiltaste Unten losgelassen");
+				console.log("%cPfeiltaste Unten losgelassen","color: lightgrey");
     }
 }
 
