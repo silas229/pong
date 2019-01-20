@@ -103,8 +103,8 @@ var game = {
   	// In der Mitte neu berechnen
   	if (ball.x <= canvas.width/2 + Math.abs(ball.vx)/2 && ball.x >= canvas.width/2 - Math.abs(ball.vx)/2) {
   		console.log("Mitte");
-  		// computer.paddle.prediction.variant(rounds.diffM[rounds.state]);
-			computer.paddle.prediction.variant(10);
+  		computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
+			// computer.paddle.prediction.variant(10);
   	}
 
   	if (ball.y > paddleHeight/2 - ball.size/2 - 1 && ball.y < canvas.height - paddleHeight/2 - ball.size/2 + 2 && ball.vx < 0) {
@@ -138,7 +138,7 @@ var game = {
 		state: 0,
 		round: [1,2,3],
 		diffP: [80,70,50],
-		diffM: [10,8,6],
+		diffM: [12,9,5],
 		/**
 		* Bildet aktuelle Runde ab
 		* @param  {int} nr state
@@ -186,8 +186,8 @@ var game = {
 				snd.paddle.play();
 				ball.vx =- ball.vx;
 				computer.paddle.prediction.predict();
-				// computer.paddle.prediction.variant(rounds.diffP[rounds.state]);
-				computer.paddle.prediction.variant(80)// ;
+				computer.paddle.prediction.variant(game.rounds.diffP[game.rounds.state]);
+				// computer.paddle.prediction.variant(80);
 				// Ball missed Player paddle
 			} else {
 				snd.point.play();
@@ -318,8 +318,8 @@ var ball = {
 		if (this.vx > 0) {
 			this.vx = -2 * (game.rounds.state + 1);
 			computer.paddle.prediction.predict();
-			// computer.paddle.prediction.variant(rounds.diffM[rounds.state]);
-			computer.paddle.prediction.variant(10);
+			computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
+			// computer.paddle.prediction.variant(10);
 		} else {
 			this.vx = 2 * (game.rounds.state + 1);
 		}
@@ -333,8 +333,8 @@ var ball = {
   	if ((Math.floor(Math.random() * (Math.floor(1) - Math.ceil(0) + 1)) + 0) == 1){
 			return 2;
 		} else {
-			// computer.paddle.prediction.variant(rounds.diffM[rounds.state]);
-			computer.paddle.prediction.variant(10);
+			computer.paddle.prediction.variant(game.rounds.diffM[game.rounds.state]);
+			// computer.paddle.prediction.variant(10);
 			computer.paddle.prediction.predict();
 			return -2;
 		}
@@ -347,7 +347,7 @@ var ball = {
  * @type {Object}
  */
 var player = {
-	score: 9,
+	score: 0,
 	name: "Spieler",
 	won: 0,
 	lose: 0,
