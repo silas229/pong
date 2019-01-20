@@ -335,7 +335,7 @@ var ball = {
 		this.toggleDir();
 		console.log("Ball in der Mitte");
 	},
-	 : function() {
+	 toggleDir: function() {
 		if (this.vx > 0) {
 			this.vx = -2 * (game.rounds.state + 1);
 		} else {

@@ -1,10 +1,10 @@
 {
 
-"supportedLocales": [
-{ "name": "DE", "id": "de", "isDefault": "true", "acrossLanguage": "de-DE" }
-],
+    "supportedLocales": [
+    { "name": "DE", "id": "de", "isDefault": "true", "acrossLanguage": "de-DE" }
+    ],
 
-"sourceLanguage": "de-DE",
+    "sourceLanguage": "de-DE",
 
      "ctx": {
           "textAlign" : "center",
