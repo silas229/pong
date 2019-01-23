@@ -692,6 +692,16 @@ var snd = new sounds.load();
 sounds.check();
 sounds.update();
 
+const gamepad = new Gamepad();
+
+gamepad.on("connect", e => {
+    console.log(`%ccontroller ${e.index} connected!`, "color: green");
+});
+
+gamepad.on("disconnect", e => {
+    console.log(`%ccontroller ${e.index} disconnected!`, "color: red");
+});
+
 snd.start.play();
 
 })();
